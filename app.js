@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var database = require("./services/database.js");
 var linesRepository = require("./repositories/linesRepository.js");
 var minecraft = require("./services/minecraft.js");
-var echo = require("./services/echo.js");
 
 var connection = require('./routes/connection.js');
 var lineRouter = require("./routes/line.js");

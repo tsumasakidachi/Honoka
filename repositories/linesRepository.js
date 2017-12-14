@@ -4,7 +4,7 @@ var sprintf = require("sprintf-js").sprintf
 var commandOnReceived = [];
 var lines = {};
 
-lines.cooldownTime = 10000;
+lines.cooldownTime = 800;
 lines.lastSentTime = 0;
 lines.lastSentMessage = "";
 lines.lines = [];

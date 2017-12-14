@@ -2,21 +2,27 @@
 
 var lines = require("../repositories/linesRepository.js");
 
-module.require = function (bot) {
-    var pangaumai = {};
-    pangaumai.cooldownTime = 30 * 1000;
-    pangaumai.lastCalledTime = 0;
+var pangaumai = {};
+pangaumai.cooldownTime = 30 * 1000;
+pangaumai.lastCalledTime = 0;
 
-    bot.on("playerCollect", (collector, collected) => {
-        var now = (new Date()).getTime();
-        if (collector.username != bot.username) return;
-        if (collected.type != 297) return;
-        if (now <= pangaumai.lastCalledTime + pangaumai.cooldownTime) return;
+pangaumai.onPlayerCollect = (collector, collectedItem) => {
+    console.log(JSON.stringify(collectedItem));
+    var now = (new Date()).getTime();
+    if (collector.type != "player") return;
+    if (collector.username != bot.username) return;
+    if (collectedItem.type != 297) return;
+    if (now <= pangaumai.lastCalledTime + pangaumai.cooldownTime) return;
 
-        lines.send("今日もパンがうまい");
-        pangaumai.lastCalledTime = (new Date()).getTime();
-    });
+    pangaumai.call();
+}
 
+pangaumai.call = () => {
+    lines.send("今日もパンがうまい");
+    pangaumai.lastCalledTime = (new Date()).getTime();
+}
 
+module.exports = function (bot) {
+    bot.on("playerCollect", (collector, collected) => pangaumai.onPlayerCollect(collector, collected));
     return pangaumai;
 }

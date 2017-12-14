@@ -10,4 +10,4 @@ echo.received = (l) => {
 };
 
 lines.onReceived(echo.received);
-module.exports = echo;
+module.exports = () => echo;

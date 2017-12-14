@@ -3,6 +3,7 @@ var settings = require("../settings.json");
 var mineflayer = require("mineflayer");
 var rs = require("readline-sync");
 var lines = require("../repositories/linesRepository.js");
+var echo = require("../behaviors/echo.js");
 var pangaumai = require("../behaviors/pangaumai.js");
 
 // Minecraft Bot
@@ -33,13 +34,16 @@ minecraft.connectAsync = async function (onLogin) {
             password: minecraft.password,
             verbose: true
         });
-        // lines
-        lines.onSent = (msg) => { minecraft.bot.chat(msg); };
-        lines.canSend = () => minecraft.isConnected;
-        minecraft.bot.on("message", async (msg) => await lines.receiveAsync(minecraft.hostName, msg));
 
         // 正常に接続しました
         minecraft.bot.on("login", () => {
+            lines.save({
+                host: minecraft.hostName,
+                createdAt: new Date(),
+                type: "notice",
+                body: minecraft.hostName + " に正常に接続しました。"
+            });
+
             /*
             if(minecraft.hostName in settings.chatFormat)
             {
@@ -50,15 +54,14 @@ minecraft.connectAsync = async function (onLogin) {
             }
             */
 
-            // Behaviors
-            pangaumai(minecraft.bot);
+            // lines
+            lines.onSent = (msg) => { minecraft.bot.chat(msg); };
+            lines.canSend = () => minecraft.isConnected;
+            minecraft.bot.on("message", async (msg) => await lines.receiveAsync(minecraft.hostName, msg));
 
-            lines.save({
-                host: minecraft.hostName,
-                createdAt: new Date(),
-                type: "notice",
-                body: minecraft.hostName + " に正常に接続しました。"
-            });
+            // Behaviors
+            minecraft.bot.echo = echo();
+            minecraft.bot.pangaumai = pangaumai(minecraft.bot);
 
             minecraft.isConnected = true;
             minecraft.isRetringConnection = true;
@@ -70,9 +73,6 @@ minecraft.connectAsync = async function (onLogin) {
 
         // 接続が終了しました
         minecraft.bot.on("end", async () => {
-            minecraft.bot = null;
-            minecraft.isConnected = false;
-
             // ログアウトしたら自動的に再接続する
             if (minecraft.isRetringConnection) {
                 await lines.save({
@@ -91,6 +91,10 @@ minecraft.connectAsync = async function (onLogin) {
                     body: minecraft.hostName + " との接続が終了しました。"
                 });
             }
+
+            minecraft.bot = null;
+            minecraft.isConnected = false;
+
         });
     }
     catch (error) {
