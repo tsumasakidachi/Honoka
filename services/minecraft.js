@@ -3,6 +3,7 @@ var settings = require("../settings.json");
 var mineflayer = require("mineflayer");
 var rs = require("readline-sync");
 var lines = require("../repositories/linesRepository.js");
+var pangaumai = require("../behaviors/pangaumai.js");
 
 // Minecraft Bot
 minecraft.user = settings.minecraft.user ? settings.minecraft.user : rs.question("Minecraft Account: ");
@@ -48,6 +49,9 @@ minecraft.connectAsync = async function (onLogin) {
                 }
             }
             */
+
+            // Behaviors
+            pangaumai(minecraft.bot);
 
             lines.save({
                 host: minecraft.hostName,
