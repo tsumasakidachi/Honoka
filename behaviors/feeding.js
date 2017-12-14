@@ -22,11 +22,11 @@ feeding.cooldownTime = 30 * 1000;
 feeding.lastCalledTime = 0;
 
 // 呼び出される
-feeding.onCalled = (line) => {
-    if (line.body.match(/ほのほの/)) {
+feeding.onCalled = (lines) => {
+    if (lines.body.match(/ほのほの/)) {
         feeding.invoke();
     }
-    else if (line.body.match(/えさ/) && isInvoked) {
+    else if (lines.body.match(/えさ/) && isInvoked) {
         feeding.await();
     }
 }
@@ -47,7 +47,7 @@ feeding.onPlayerCollect = (collector, collectedItem) => {
 }
 
 feeding.invoke = () => {
-    line.send("ほの");
+    lines.send("ほの");
     isInvoked = true;
 }
 
@@ -69,7 +69,7 @@ feeding.clear = () => {
 }
 
 module.exports = function (bot) {
-    lines.onReceived((line) => feeding.onCalled(line));
+    lines.onReceived((lines) => feeding.onCalled(lines));
     bot.on("playerCollect", (collector, collected) => feeding.onPlayerCollect(collector, collected));
     return feeding;
 }
