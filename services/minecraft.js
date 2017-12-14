@@ -4,7 +4,7 @@ var mineflayer = require("mineflayer");
 var rs = require("readline-sync");
 var lines = require("../repositories/linesRepository.js");
 var echo = require("../behaviors/echo.js");
-var pangaumai = require("../behaviors/pangaumai.js");
+var feeding = require("../behaviors/feeding.js");
 
 // Minecraft Bot
 minecraft.user = settings.minecraft.user ? settings.minecraft.user : rs.question("Minecraft Account: ");
@@ -61,7 +61,7 @@ minecraft.connectAsync = async function (onLogin) {
 
             // Behaviors
             minecraft.bot.echo = echo();
-            minecraft.bot.pangaumai = pangaumai(minecraft.bot);
+            minecraft.bot.feeding = feeding(minecraft.bot);
 
             minecraft.isConnected = true;
             minecraft.isRetringConnection = true;
