@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <link type="text/css" rel="stylesheet" href="/resources/styles.css" />
+    <link type="text/css" rel="stylesheet" href="/resources/themes.css" />
+    <link type="text/css" rel="stylesheet" href="/resources/linePageStyle.css" />
+    <script type="text/javascript" src="/resources/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/resources/vue.min.js"></script>
+    <title>LINES</title>
+</head>
+
+<body>
+    <div id="framework">
+        <header class="clearfix">
+            <h1 id="logo">
+                <a href="/">LINES</a>
+            </h1>
+            <div id="nameCard">
+                <p id="connectivity">
+                    <a href="/" v-html="connectivity"></a>
+                </p>
+                <p id="host">{{host}}</p>
+                <p id="name">{{user}}</p>
+            </div>
+        </header>
+        <article id="content">
+            <section id="lines" class="workspaceView">
+                <header class="clearfix">
+                    <h1 class="captionTextStyle">LINES</h1>
+                </header>
+                <div class="content">
+                    <form id="sendingMessage" method="post" action="/line/create/">
+                        <p id="submit">
+                            <input id="body" name="body" type="text" value="" v-model="body" required="required" autofocus="autofocus" />
+                            <button type="submit">送信</button>
+                        </p>
+                    </form>
+                    <div class="listView messagesView">
+                        <div v-for="line in lines" class="messagesViewItem">
+                            <p class="createdAt">{{line.createdAt}}</p>
+                            <p class="body">{{line.body}}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </div>
+    <script type="text/javascript" src="/resources/linePageViewModel.js"></script>
+</body>
+
+</html>

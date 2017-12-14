@@ -1,0 +1,29 @@
+{
+  "name": "line",
+  "version": "1.0.12",
+  "description": "line",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "mineflayer": "git://github.com/fubira/mineflayer.git",
+    "morgan": "~1.9.0",
+    "mysql": "^2.15.0",
+    "pug": "2.0.0-beta11",
+    "readline-sync": "^1.4.7",
+    "serve-favicon": "~2.4.5",
+    "sprintf-js": "^1.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsumasakidachi/Line.git"
+  },
+  "author": "tsumasakidachi",
+  "license": "MIT"
+}

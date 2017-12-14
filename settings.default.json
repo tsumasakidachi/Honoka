@@ -1,0 +1,15 @@
+{
+    "connectOnStartup": false,
+    "minecraft":
+    {
+        "user": "",
+        "password": ""
+    },
+    "database": {
+        "host": "",
+        "user": "",
+        "password": "",
+        "database": ""
+    },
+    "chatFormat": {}
+}

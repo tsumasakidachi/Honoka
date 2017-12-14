@@ -1,0 +1,467 @@
+@charset 'UTF-8';
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* ページ基本 */
+
+body
+{
+	margin: 0px;
+	padding: 0px;
+	background-color: #fff;
+	font-size: 15px;
+	line-height: 20px;
+	font-family: 'Segoe UI','Yu Gothic UI','Meiryo',sans-serif;
+	/*
+	font-family: 'Segoe UI','Yu Gothic UI',sans-serif;
+	font-family: 'Tw Cen MT', 'Futura', 'Segoe UI', 'Yu Gothic UI', 'Meiryo',sans-serif;
+	font-family: 'Calibri','Verdana','ＭＳ Ｐゴシック',sans-serif;
+	*/
+	color: #000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+dl,
+form,
+address,
+table
+{
+	margin-top: 0px;
+	margin-bottom: 20px;
+}
+
+sup, sub
+{
+	line-height: 0.5em;
+}
+
+/*
+h1 *,
+h2 *,
+h3 *,
+h4 *,
+h5 *,
+h6 *,
+p *,
+li *,
+dd *,
+dt *,
+address *,
+th *,
+ td *
+{
+	vertical-align: middle;
+}
+*/
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* リンク */
+
+a
+{
+	text-decoration: none;
+}
+
+a:link
+{
+	color: #06c;
+	text-decoration: none;
+}
+
+a:visited
+{
+	color: #939;
+}
+
+a:active
+{
+	color: #39f;
+}
+
+a:hover
+{
+	color: #39f;
+}
+
+/*
+* a
+{
+	vertical-align: baseline;
+}
+*/
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* テーブル */
+
+table
+{
+	border-collapse: collapse;
+	border-width: 0;
+	font-size: 1em;
+}
+
+thead th
+{
+	color: #4c607a;
+}
+
+thead td
+{
+	border-width: 0;
+	color: #4c607a;
+}
+
+th
+{
+	padding: 16px 16px 0px 0px;
+	border-width: 0px;
+	vertical-align: top;
+	text-align: left;
+	font-weight: normal;
+	color: #808080;
+}
+
+td {
+	padding: 16px 16px 0px 0px;
+    border-width: 0px;
+    vertical-align: top;
+    text-align: left;
+}
+
+tr:first-child th, tr:first-child td
+{
+	padding: 00px 12px 0px 0px;
+}
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* 見出し */
+
+h1, h2, h3, h4, h5, h6
+{
+	font-size: 15px;
+	line-height: 20px;
+	font-weight: normal;
+}
+
+/*
+h1
+{
+	font-size: 36pt;
+	font-weight: 300;
+}
+
+h2
+{
+	font-size: 16pt;
+	font-weight: normal;
+}
+
+h3
+{
+	margin-bottom: 0px;
+	font-size: 11pt;
+	font-weight: normal;
+}
+
+h4
+{
+}
+
+h5
+{
+}
+
+h6
+{
+}
+*/
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* その他基本 */
+
+/* 画像 */
+img
+{
+	vertical-align: middle;
+	border-width: 0px;
+}
+
+/* 水平線 */
+hr
+{
+	height: 1px;
+	color: #ccc;
+}
+
+/* 順不同リスト */
+ul
+{
+	margin-left: 20px;
+	padding-left: 0px;
+}
+
+li
+{
+	margin-left: 0;
+	padding-left: 0px;
+}
+
+li ul
+{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+/* 定義リスト */
+dl
+{
+}
+
+dt
+{
+	color: #063;
+}
+
+dd
+{
+	margin: 6px 12px;
+	padding: 0px;
+}
+
+/* 強い強調 */
+strong
+{
+}
+
+/* 弱い強調 */
+em
+{
+	font-style: normal;
+	font-weight: bold;
+}
+
+/* 削除された文 */
+del
+{
+	text-decoration: none;
+	color: #999;
+}
+
+/* その他 */
+input,
+button,
+textarea,
+select
+{
+	vertical-align: middle;
+    font-size: 11pt;
+}
+
+/* セクション */
+section
+{
+	margin-bottom: 40px;
+}
+
+section:last-child
+{
+	margin-bottom: 0px;
+}
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* 汎用クラス */
+
+/**
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+    *zoom: 1;
+}
+
+.leftColumn
+{
+	float: left;
+}
+
+.rightColumn
+{
+	float: right;
+}
+
+/* フォーム */
+form section
+{
+	margin-bottom: 20px;
+}
+
+form section > h1
+{
+	margin-bottom: 8px;
+}
+
+form section > p
+{
+}
+
+form #submit
+{
+}
+
+form #submit input,
+form #submit button,
+form .submit input,
+form .submit button
+{
+}
+
+textarea
+{
+	font-family: 'Segoe UI','Yu Gothic UI','Meiryo',sans-serif;
+}
+
+/* Notify */
+
+.note
+{
+	font-size: 9pt;
+	color: #808080;
+}
+
+.error
+{
+	color: #d6335c;
+}
+
+/* フライアウト */
+.flyoutHolder
+{
+	position: relative;
+}
+.flyout
+{
+	padding: 20px;
+	position: absolute;
+	display: none;
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #000;
+}
+
+/* 赤字 */
+
+.deficit
+{
+	color: #f00;
+}
+
+/* リスト ビュー */
+ul.listView {
+    margin-left: 0px;
+    list-style-type: none;
+}
+
+ul.listView li {
+    margin-bottom: 20px;
+}
+
+/* グリッド ビュー */
+
+.gridView
+{
+    letter-spacing: -1em;
+}
+
+.gridView .gridViewItem
+{
+    margin: 0px 4px 4px 0px;
+    display: inline-block;
+    letter-spacing: 0em;
+}
+
+.gridView .gridViewItem *
+{
+    display: block;
+}
+
+/* 文字体裁 */
+
+.headerTextStyle
+{
+    font-size: 46px;
+	line-height: 56px;
+    font-weight: 200;
+}
+
+.subHeaderTextStyle
+{
+    font-size: 34px;
+	line-height: 40px;
+    font-weight: 200;
+}
+
+.titleTextStyle
+{
+    font-size: 24px;
+	line-height: 28px;
+    font-weight: 200;
+}
+
+.subTitleTextStyle
+{
+	font-size: 20px;
+	line-height: 24px;
+    font-weight: normal;
+}
+
+.bodyTextStyle
+{
+	font-size: 15px;
+	line-height: 20px;
+}
+
+.captionTextStyle
+{
+	font-size: 12px;
+	line-height: 14px;
+}
+
+/* リンク */
+
+.mainCommandLinkButton {
+    padding: 10px;
+    display: inline-block;
+    background-color: #00BDBD;
+    color: #ffffff;
+}
+
+/* フォント */
+.symbolIconFontStyle
+{
+	font-family: "Segoe MDL2 Assets";
+}

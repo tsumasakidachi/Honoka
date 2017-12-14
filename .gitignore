@@ -1,0 +1,6 @@
+/.vscode
+/node_modules
+/SampleData
+/package-lock.json
+/lang.json
+/settings.json

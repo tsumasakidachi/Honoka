@@ -1,0 +1,66 @@
+
+/* ヘッダ ------------------------------------------------------------------------------------------------------------ */
+
+#framework > header #notifications #connectivity
+{
+    font-family: "Segoe MDL2 Assets";
+}
+
+/* LINE ------------------------------------------------------------------------------------------------------------- */
+#content
+{
+    padding-top: 0px;
+}
+
+#lines
+{
+
+}
+
+#lines header
+{
+    display: none;
+}
+
+#lines #sendingMessage #submit #body
+{
+    width: 600px;
+    height: 20px;
+    display: inline-block;
+}
+
+#lines #sendingMessage #submit button
+{
+    width: 20px;
+    height: 20px;
+    margin-left: 4px;
+    padding: 0px;
+    display: inline-block;
+    background-color: transparent;
+    border-width: 0px;
+    cursor: pointer;
+}
+
+#lines .messagesView
+{
+    margin-top: 40px;
+}
+
+#lines .messagesView .messagesViewItem
+{
+    margin-bottom: 8px;
+}
+
+#lines .messagesView .messagesViewItem .createdAt
+{
+    margin-bottom: 0px;
+    margin-right: 8px;
+    display: inline-block;
+    color: #808080;
+}
+
+#lines .messagesView .messagesViewItem .body
+{
+    margin-bottom: 0px;
+    display: inline-block;
+}

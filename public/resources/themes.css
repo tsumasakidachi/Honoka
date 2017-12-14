@@ -1,0 +1,247 @@
+@charset 'UTF-8';
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ページ */
+
+html,body
+{
+    margin: 0px;
+    height: 100%;
+    background-color: #f6f6f6;
+    font-family: 'Segoe UI', 'Meiryo', sans-serif;
+}
+
+a:link,
+a:visited
+{
+    color: #00B5B5;
+}
+
+a:active,
+a:hover
+{
+    color: #68D9D9;
+}
+
+#framework
+{
+    margin: 0px;
+    min-height: 100%;
+    position: relative;
+}
+
+#framework:last-child > *
+{
+    margin-bottom: 0px;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ヘッダ */
+
+#framework > header
+{
+    padding: 0px 80px;
+}
+
+#framework > header #logo
+{
+    margin-right: 40px;
+    margin-bottom: 0px;
+    padding: 0px;
+    float: left;
+    line-height: 40px;
+    font-weight: 500;
+}
+
+#framework > header #logo a
+{
+    display: block;
+}
+
+#framework > header #logo a:link,
+#framework > header #logo a:visited
+{
+    color: #000000;
+}
+
+#framework > header #logo a:active,
+#framework > header #logo a:hover
+{
+    color: #333333;
+}
+
+#framework > header #logo a img, #framework > header #logo a span
+{
+    margin-left: 8px;
+    display: inline-block;
+}
+
+#framework > header #logo a img:first-child, #framework > header #logo a span:first-child
+{
+    margin-left: 0px;
+}
+
+#framework > header #notifications
+{
+    padding: 10px 0px;
+    float: right;
+}
+
+#framework > header #notifications p
+{
+    margin-right: 8px;
+    margin-bottom: 0px;
+    float: left;
+    color: #808080;
+}
+
+#framework > header #notifications p:last-child
+{
+    margin-right: 0px;
+}
+
+#framework > header #notifications a:link,
+#framework > header #notifications a:visited
+{
+    color: #808080;
+}
+
+#framework > header #notifications a:active,
+#framework > header #notifications a:hover
+{
+    color: #909090;
+}
+
+#framework > header #notifications p#name
+{
+}
+
+#framework > header nav
+{
+    margin-right: 40px;
+    padding: 10px 0px;
+    float: left;
+}
+
+#framework > header nav ul
+{
+    margin: 0px;
+    list-style-type: none;
+}
+
+#framework > header nav ul li
+{
+    margin-right: 12px;
+    float: left;
+}
+
+#framework > header nav ul li:last-child
+{
+    margin-right: 0px;
+}
+
+#framework > header nav ul li a
+{
+    display: block;
+}
+
+#framework > header nav ul li a:link,
+#framework > header nav ul li a:visited
+{
+    color: #c0c0c0;
+}
+
+#framework > header nav ul li a:active,
+#framework > header nav ul li a:hover
+{
+    color: #ffffff;
+}
+
+#framework > header nav ul li.selectedItem a:link,
+#framework > header nav ul li.selectedItem a:visited
+{
+    color: #00B5B5;
+}
+
+#framework > header nav ul li.selectedItem a:active,
+#framework > header nav ul li.selectedItem a:hover
+{
+    color: #68D9D9;
+}
+
+#framework > header #commandBar
+{
+    margin: 0px;
+    padding: 10px 0px;
+    float: left;
+}
+
+#framework > header #commandBar ul
+{
+    margin: 0px;
+    list-style-type: none;
+    letter-spacing: -1em;
+}
+
+#framework > header #commandBar ul > li
+{
+    display: inline-block;
+    letter-spacing: 0em;
+}
+
+#framework > header #commandBar ul > li a
+{
+    margin-right: 12px;
+    display: block;
+    color: #e0e0e0;
+}
+
+#framework > header #commandBar ul > li a:last-child
+{
+}
+
+#framework > header #commandBar ul > li a:link, #framework > header #commandBar ul > li a:visited
+{
+}
+
+#framework > header #commandBar ul > li a:active, #framework > header #commandBar ul > li a:hover
+{
+    color: #fff;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ボディ */
+
+#content
+{
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 80px;
+    padding-right: 80px;
+    clear: both;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* フッタ */
+
+#framework > footer
+{
+    padding-left: 80px;
+    padding-right: 80px;
+    position: absolute;
+    bottom: 20px;
+    clear: both;
+	font-size: 12px;
+	line-height: 14px;
+    color: #999;
+}
+
+#framework > footer p#copyright
+{
+    margin: 0px;
+}
+
+#framework > footer p#copyright a
+{
+    color: inherit;
+}
