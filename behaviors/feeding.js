@@ -32,15 +32,23 @@ feeding.onCalled = (lines) => {
 }
 
 // パンを渡される
-feeding.onPlayerCollect = (collector, collectedItem) => {
-    console.log(JSON.stringify(collectedItem));
+feeding.onPlayerCollect = (collector, collected) => {
+    console.log(JSON.stringify(collected));
+    var hasBread = false;
     
     var now = (new Date()).getTime();
 
     if (!isInvoked && !isAwaited) return;
     if (collector.type != "player") return;
     if (collector.username != bot.username) return;
-    if (collectedItem.type != 297) return;
+    if (collected.type != "object") return;
+
+    for(key in collected.metadata)
+    {
+        if("blockId " in collected.metadata[key] && collected.metadata[key].blockId == 297) hasBread = true;
+    }
+
+    if (!hasBread) return;
     if (now <= feeding.lastCalledTime + feeding.cooldownTime) return;
 
     feeding.answer();
