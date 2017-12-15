@@ -5,7 +5,7 @@ echo.received = (l) => {
     // if(result = l.body.match(/^\[[^\[\]]+\]<(\w+)>\s+)?$/i))
     if(result = l.body.match(/bot/i))    
     {
-        lines.send("botになって何が悪い");
+        lines.send("BOTだよ！");
     }
 };
 
