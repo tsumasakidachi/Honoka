@@ -33,7 +33,6 @@ feeding.onCalled = (line) => {
 
 // パンを渡される
 feeding.onPlayerCollect = (collector, collected) => {
-    console.log(JSON.stringify(collected));
     var hasBread = false;
     
     var now = (new Date()).getTime();
