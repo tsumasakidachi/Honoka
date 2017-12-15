@@ -6,7 +6,8 @@ var database = mysql.createConnection(
         host: settings.database.host,
         user: settings.database.user,
         password: settings.database.password,
-        database: settings.database.database
+        database: settings.database.database,
+        charset: "utf8mb4"
     });
 
 database.lines = {};
