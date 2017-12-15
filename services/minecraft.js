@@ -58,7 +58,7 @@ minecraft.connectAsync = async function (onLogin) {
             minecraft.bot.on("message", async (msg) => await lines.receiveAsync(minecraft.hostName, msg));
 
             // Behaviors
-            minecraft.bot.echo = echo();
+            minecraft.bot.echo = echo(minecraft.bot);
             minecraft.bot.feeding = feeding(minecraft.bot);
 
             minecraft.isConnected = true;
