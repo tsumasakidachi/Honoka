@@ -41,18 +41,16 @@ minecraft.connectAsync = async function (onLogin) {
                 host: minecraft.hostName,
                 createdAt: new Date(),
                 type: "notice",
-                body: minecraft.hostName + " に正常に接続しました。"
+                message: minecraft.hostName + " に正常に接続しました。"
             });
 
-            /*
             if(minecraft.hostName in settings.chatFormat)
             {
                 for(key in settings.chatFormat[minecraft.hostName])
                 {
-                    minecraft.bot.chatAddPattern(settings.chatFormat[minecraft.hostName][key]["regex"], key, settings.chatFormat[minecraft.hostName][key]["description"]);
+                    minecraft.bot.chatAddPattern(new RegExp(settings.chatFormat[minecraft.hostName][key]["regex"], "i"), key, settings.chatFormat[minecraft.hostName][key]["description"]);
                 }
             }
-            */
 
             // lines
             lines.onSent = (msg) => { minecraft.bot.chat(msg); };
@@ -79,7 +77,7 @@ minecraft.connectAsync = async function (onLogin) {
                     host: minecraft.hostName,
                     createdAt: new Date(),
                     type: "error",
-                    body: minecraft.hostName + " との接続が終了しました。10 秒後に再接続します。"
+                    message: minecraft.hostName + " との接続が終了しました。10 秒後に再接続します。"
                 });
                 setTimeout(async () => await minecraft.connectAsync(onLogin), 10000);
             }
@@ -88,7 +86,7 @@ minecraft.connectAsync = async function (onLogin) {
                     host: minecraft.hostName,
                     createdAt: new Date(),
                     type: "notice",
-                    body: minecraft.hostName + " との接続が終了しました。"
+                    message: minecraft.hostName + " との接続が終了しました。"
                 });
             }
 
@@ -102,7 +100,7 @@ minecraft.connectAsync = async function (onLogin) {
             host: minecraft.hostName,
             createdAt: new Date(),
             type: "error",
-            body: minecraft.hostName + " へ接続しようとしましたが次のエラーによってに失敗しました:\n" + error
+            message: minecraft.hostName + " へ接続しようとしましたが次のエラーによってに失敗しました:\n" + error
         });
 
         minecraft.connectionFailCount++;

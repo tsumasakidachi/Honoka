@@ -18,9 +18,9 @@ router.get("/latest", async (req, res, next) => {
     });
 });
 router.post("/create", async (req, res, next) => {
-    if (!("body" in req.body)) throw new Error("body が空です。");
-    var body = req.body.body;
-    req.line.send(body);
+    if (!("message" in req.body)) throw new Error("message が空です。");
+    var message = req.body.message;
+    req.line.send(message);
     res.json({});
 });
 

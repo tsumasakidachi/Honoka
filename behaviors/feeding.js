@@ -22,11 +22,11 @@ feeding.cooldownTime = 30 * 1000;
 feeding.lastCalledTime = 0;
 
 // 呼び出される
-feeding.onCalled = (lines) => {
-    if (lines.body.match(/ほのほの/)) {
+feeding.onCalled = (line) => {
+    if (line.body.match(/^ほのほの$/)) {
         feeding.invoke();
     }
-    else if (lines.body.match(/えさ/) && isInvoked) {
+    else if (line.body.match(/^えさ$/) && isInvoked) {
         feeding.await();
     }
 }

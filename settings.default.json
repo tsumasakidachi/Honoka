@@ -1,7 +1,6 @@
 {
     "connectOnStartup": false,
-    "minecraft":
-    {
+    "minecraft": {
         "user": "",
         "password": ""
     },
@@ -11,5 +10,16 @@
         "password": "",
         "database": ""
     },
-    "chatFormat": {}
+    "chatFormat": {
+        "default": {
+            "chat": {
+                "regex": "^<(\\w+)>\\s+(.+)?$",
+                "description": "default chat"
+            },
+            "wisper": {
+                "regex": "^([\\w_]+) whispers: (.+)$",
+                "description": "default wisper"
+            }
+        }
+    }
 }

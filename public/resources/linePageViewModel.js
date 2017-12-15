@@ -17,7 +17,7 @@ $(function () {
                     entities: {},
                     blocks: {},
                     latestLineId: 0,
-                    body: ""
+                    message: ""
                 },
 
             computed:
@@ -101,16 +101,16 @@ $(function () {
                     },
 
                     sendMessage: function () {
-                        if (!this.body) return;
+                        if (!this.message) return;
 
                         $.post("/repositories/lines/create/",
                             {
-                                body: this.body
+                                message: this.message
                             },
                             (function (response, status) {
                                 if (status != "success") return;
 
-                                this.body = "";
+                                this.message = "";
                             }).bind(this)
                         );
                     },

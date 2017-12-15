@@ -22,10 +22,10 @@ html(lang="ja")
             div.content
               form#sendingMessage(method="post", action="/line/create/")
                 p#submit
-                  input#body.symbolIconFontStyle(name="body" type="text" value="" v-model="body" required="required" autofocus="autofocus")
+                  input#body.symbolIconFontStyle(name="message" type="text" value="" v-model="message" required="required" autofocus="autofocus")
                   button.symbolIconFontStyle(type="submit")!= "&#xE724;"
               div.listview.messagesView
                 div.messagesViewItem( v-for="line in lines")
                   p.createdAt {{line.createdAt}}
-                  p.body {{line.body}}
+                  p.body {{line.message}}
     script(type="text/javascript" src="/resources/linePageViewModel.js")
