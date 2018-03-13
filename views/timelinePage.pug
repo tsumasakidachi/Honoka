@@ -1,0 +1,31 @@
+doctype html
+html(lang="ja")
+  head
+    meta(charset="utf-8")
+    link(rel="stylesheet", href="/resources/styles.css")
+    link(rel="stylesheet", href="/resources/themes.css")
+    link(rel="stylesheet", href="/resources/timelinePageStyle.css")
+    script(type="text/javascript", src="/resources/jquery-3.2.1.min.js")
+    script(type="text/javascript", src="/resources/knockout-3.4.2.js")
+    script(type="text/javascript", src="/resources/timelinePageViewModel.js")
+    title Honoka
+  body
+    div#framework
+        header.clearfix
+          h1#logo
+            a(href="/")= hostName
+          div#nameCard
+            p#name= user
+            p
+              a#connectButton(href="/.repos/connection/connect/" data-bind="visible: connectButtonVisibility, click: connect") 接続
+              a#disconnectButton(href="/.repos/connection/disconnect/" data-bind="visible: disconnectButtonVisibility, click: disconnect") 切断
+        article#content
+          form#sendingMessage(method="post" action="/.repos/lines/create/" data-bind="submit: post")
+            p#submit
+              input#body.symbolIconFontStyle(name="text" type="text" value="" data-bind="textInput: text" required="required" autofocus="autofocus")
+              button.symbolIconFontStyle(type="submit")!= "送信"
+          div#messages.listview.messagesView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
+            div.messagesViewItem(data-bind="css: type")
+              p.createdTime(data-bind="text: createdAtText")
+              div.body
+                p(data-bind="text: text")

@@ -1,18 +1,24 @@
-var lines = require("../repositories/linesRepository.js");
+var echo = function (lineRepository, hostInfoService, factorioService) {
+    var self = this;
 
-module.exports = (bot) => {
-    var echo = {};
+    self.factorio = function(line) {
+        if (!line.body || !line.body.match(/(factorio|ファクトリオ)/i)) return;
 
-    echo.received = (l) => {
-        if (l.player == bot.username) return;
-        
-        // if(result = l.body.match(/^\[[^\[\]]+\]<(\w+)>\s+)?$/i))
-        if (result = l.body.match(/bot/i)) {
-            lines.send("BOTだよ！");
-        }
+        self.asnwerFactorio();
     };
 
-    lines.onReceived(echo.received);
+    self.asnwerFactorio = async function (hostInfo) {
+        var hostInfo = await hostInfoService.getAsync(self.asnwerFactorio);
+        var isOnline = await factorioService.isOnlineAsync();
 
-    return echo;
+        var status = isOnline ? 'オンライン' : 'オフライン';
+
+        lineRepository.send('Factorio マルチ鯖: ' + hostInfo.address + ' ' + status);
+    };
+
+    lineRepository.onReceived(self.factorio);
+
+    return this;
 }
+
+module.exports = echo;

@@ -1,17 +1,29 @@
-var settings = require("./settings.json");
+// Standard Modules
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var database = require("./services/database.js");
-var linesRepository = require("./repositories/linesRepository.js");
-var minecraft = require("./services/minecraft.js");
 
-var connection = require('./routes/connection.js');
-var lineRouter = require("./routes/line.js");
-var propertiesRouter = require("./routes/properties.js");
+// Settings
+var settings = require("./settings.json");
+
+// Database
+var mysql = require("mysql").createConnection(
+    {
+        host: settings.database.host,
+        user: settings.database.user,
+        password: settings.database.password,
+        database: settings.database.database,
+        charset: "utf8mb4"
+    });
+
+// Honoka Modules
+var hostInfoService = require('./services/hostInfoService.js')();
+var factorioService = require('./services/factorioService.js')();
+var lineRepository = require("./repositories/lineRepository.js")(mysql);
+var minecraftServiceProxy = require("./services/minecraftServiceProxy.js")(lineRepository, hostInfoService, factorioService);
 
 var app = express();
 
@@ -29,18 +41,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // データ リポジトリ
 app.use(function (req, res, next) {
-    req.minecraft = minecraft;
-    req.line = linesRepository;
-    // req.block = block;
-    // req.entity = entity;
+    req.minecraft = minecraftServiceProxy;
+    req.line = lineRepository;
+    
     next();
 });
 
-app.use('/repositories/connection', connection);
-app.use("/repositories/lines", lineRouter);
-app.use("/repositories/properties", propertiesRouter);
+// ルーティング
+var reposRouter = require('./routes/reposRouter.js');
+app.use('/.repos', reposRouter);
+
 app.get("/", (req, res) => {
-    res.render("linePage", {
+    res.render("timelinePage", {
+        user: req.minecraft.user,
         hostName: req.minecraft.hostName
     });
 });

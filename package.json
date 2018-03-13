@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "~1.18.2",
+    "comma-separated-values": "^3.6.4",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
@@ -13,6 +14,7 @@
     "mysql": "^2.15.0",
     "pug": "2.0.0-beta11",
     "readline-sync": "^1.4.7",
+    "request-promise": "^4.2.2",
     "serve-favicon": "~2.4.5",
     "sprintf-js": "^1.1.1"
   },

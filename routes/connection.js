@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
-router.post('/connect', async (req, res, next) => {
-    await req.minecraft.connectAsync((error) => {
+router.post('/connect', (req, res, next) => {
+    req.minecraft.connectc((error) => {
         if (error) throw error;
 
         res.json({
@@ -14,8 +14,8 @@ router.post('/connect', async (req, res, next) => {
 });
 
 /* GET home page. */
-router.post('/disconnect', async (req, res, next) => {
-    await req.minecraft.disconnectAsync((error) => {
+router.post('/disconnect', (req, res, next) => {
+    req.minecraft.disconnect((error) => {
         if (error) throw error;
 
         res.json({

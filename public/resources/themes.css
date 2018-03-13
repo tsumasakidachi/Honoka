@@ -70,50 +70,45 @@ a:hover
     color: #333333;
 }
 
-#framework > header #logo a img, #framework > header #logo a span
+#framework > header #logo a img
 {
-    margin-left: 8px;
-    display: inline-block;
+    display: block;
 }
 
-#framework > header #logo a img:first-child, #framework > header #logo a span:first-child
-{
-    margin-left: 0px;
-}
-
-#framework > header #notifications
+#framework > header #nameCard
 {
     padding: 10px 0px;
     float: right;
 }
 
-#framework > header #notifications p
+#framework > header #nameCard p
 {
     margin-right: 8px;
     margin-bottom: 0px;
     float: left;
-    color: #808080;
+    color: #c0c0c0;
 }
 
-#framework > header #notifications p:last-child
+#framework > header #nameCard p:last-child
 {
     margin-right: 0px;
 }
 
-#framework > header #notifications a:link,
-#framework > header #notifications a:visited
+#framework > header #nameCard a:link,
+#framework > header #nameCard a:visited
 {
     color: #808080;
 }
 
-#framework > header #notifications a:active,
-#framework > header #notifications a:hover
+#framework > header #nameCard a:active,
+#framework > header #nameCard a:hover
 {
     color: #909090;
 }
 
-#framework > header #notifications p#name
+#framework > header #nameCard p#name
 {
+    color: #666666;
 }
 
 #framework > header nav
@@ -229,19 +224,36 @@ a:hover
     padding-left: 80px;
     padding-right: 80px;
     position: absolute;
-    bottom: 20px;
+    bottom: 0px;
     clear: both;
-	font-size: 12px;
-	line-height: 14px;
     color: #999;
 }
 
-#framework > footer p#copyright
+#framework > footer #contentInfo
 {
-    margin: 0px;
+    margin-left: 0px;
+    list-style-type: none;
 }
 
-#framework > footer p#copyright a
+#framework > footer #contentInfo li
+{
+    margin-right: 20px;
+    display: inline-block;
+}
+
+#framework > footer #contentInfo li:last-child
+{
+    margin-right: 0px;
+}
+
+#framework > footer #contentInfo a:link,
+#framework > footer #contentInfo a:visited
 {
     color: inherit;
+}
+
+#framework > footer #contentInfo a:active,
+#framework > footer #contentInfo a:hover
+{
+    color: #68D9D9;
 }

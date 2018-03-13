@@ -1,0 +1,72 @@
+#content
+{
+    padding-top: 0px;
+}
+
+
+#sendingMessage
+{
+    margin-bottom: 40px;
+}
+
+#sendingMessage #body
+{
+    width: 600px;
+}
+
+.messagesView
+{
+    
+}
+
+.messagesView .messagesViewItem
+{
+    margin-bottom: 0px;
+}
+
+.messagesView .messagesViewItem .createdTime
+{
+    display: inline-block;
+    margin-bottom: 0px;
+    margin-right: 0.5em;
+}
+
+.messagesView .messagesViewItem .body
+{
+    display: inline-block;
+    color: #808080;
+}
+
+.messagesView .messagesViewItem.chat .body
+{
+    color: #000000;
+}
+
+.messagesView .messagesViewItem .body p
+{
+    display: inline-block;
+    white-space: pre-line;
+}
+
+.messagesView .messagesViewItem .body p:last-child
+{
+    margin-bottom: 0px;
+}
+
+.messagesView .messagesViewItem .actions
+{
+    margin-top: 6px;
+    margin-left: 0px;
+    list-style-type: none;
+}
+
+.messagesView .messagesViewItem .actions li
+{
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.messagesView .messagesViewItem .actions li:last-child
+{
+    margin-right: 0px;
+}
