@@ -439,6 +439,11 @@ ul.listView li {
 	line-height: 14px;
 }
 
+.symbolIconFontStyle
+{
+    font-family: 'Segoe MDL2 Assets';
+}
+
 /* リンク */
 
 .mainCommandLinkButton {

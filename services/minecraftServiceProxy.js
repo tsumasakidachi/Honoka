@@ -1,20 +1,21 @@
 var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioService) {
     let self = this;
-    let settings = require("../settings.json");
-    let mineflayer = require("mineflayer");
-    let rs = require("readline-sync");
-    let echoService = require("../services/echoService.js");
+    let settings = require('../settings.json');
+    let mineflayer = require('mineflayer');
+    let rs = require('readline-sync');
+    let echoService = require('../services/echoService.js');
 
     // Minecraft Account
-    self.user = settings.minecraft.user ? settings.minecraft.user : rs.question("Minecraft Account: ");
-    let password = settings.minecraft.password ? settings.minecraft.password : rs.question("Password: ", { hideEchoBack: true });
+    let account = settings.minecraft.user ? settings.minecraft.user : rs.question('Minecraft Account: ');
+    let password = settings.minecraft.password ? settings.minecraft.password : rs.question('Password: ', { hideEchoBack: true });
 
-    let server = rs.question("Host: ").split(":");
+    let server = rs.question('Host: ').split(':');
     self.host = server[0];
-    self.port = server.length >= 2 ? server[1] : "25565";
-    self.hostName = self.host + ":" + self.port;
+    self.port = server.length >= 2 ? server[1] : '25565';
+    self.hostName = self.host + ':' + self.port;
     self.isConnected = false;
     self.isRetringConnection = false;
+    self.userName = '';
 
     // 接続失敗回数
     self.connectionFailCount = 0;
@@ -25,22 +26,22 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
         self.bot = mineflayer.createBot({
             host: self.host,
             port: self.port,
-            username: self.user,
+            username: account,
             password: password,
             verbose: true
         });
 
         // 正常に接続しました
-        self.bot.on("login", self.onLogined);
+        self.bot.on('login', self.onLogined);
 
         // 接続が終了しました
-        self.bot.on("end", self.onEnded);
+        self.bot.on('end', self.onEnded);
     };
 
     // ログアウト
     self.disconnect = function () {
-        minecraft.isRetringConnection = false;
-        minecraft.bot.quit();
+        self.isRetringConnection = false;
+        self.bot.quit();
     }
 
     self.onLogined = function()
@@ -48,18 +49,19 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
         lineRepository.save({
             hostName: self.hostName,
             createdAt: new Date(),
-            type: "notice",
-            text: self.hostName + " に正常に接続しました。"
+            type: 'notice',
+            text: self.hostName + ' に正常に接続しました。'
         });
 
         // lineRepository
         lineRepository.onSent = (msg) => self.bot.chat(msg);
         lineRepository.canSend = () => self.isConnected;
-        self.bot.on("message", (msg) => lineRepository.receive(self.hostName, msg));
+        self.bot.on('message', (msg) => lineRepository.receive(self.hostName, msg));
 
         // Behaviors
         self.bot.echo = echoService(lineRepository, hostInfoService, factorioService);
 
+        self.userName = bot.username;
         self.isConnected = true;
         self.isRetringConnection = true;
         self.connectionFailCount = 0;
@@ -72,8 +74,8 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
             lineRepository.save({
                 hostName: self.hostName,
                 createdAt: new Date(),
-                type: "error",
-                text: self.hostName + " との接続が終了しました。10 秒後に再接続します。"
+                type: 'error',
+                text: self.hostName + ' との接続が終了しました。10 秒後に再接続します。'
             });
 
             setTimeout(() => self.connect(), 10000);
@@ -82,8 +84,8 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
             lineRepository.save({
                 hostName: self.hostName,
                 createdAt: new Date(),
-                type: "notice",
-                text: self.hostName + " との接続が終了しました。"
+                type: 'notice',
+                text: self.hostName + ' との接続が終了しました。'
             });
         }
 

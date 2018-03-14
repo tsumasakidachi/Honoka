@@ -1,96 +1,114 @@
 $(function () {
-    function TimelinePageViewModel() {
-        var self = this;
+    function mainPageScript() {
+        this.isConnected = ko.observable(false);
+        this.userName = ko.observable('');
+        this.hostName = ko.observable('');
+        this.text = ko.observable('');
 
-        self.result = ko.observable('');
-        self.lines = ko.observableArray([]);
-        self.upper = ko.observable(-1);
-        self.lower = ko.observable(-1);
-        self.text = ko.observable('');
-        self.unreadsCount = ko.observable(0);
-        self.unreadsCountVisibility = ko.computed(() => self.unreadsCount > 0);
+        this.lines = ko.observableArray([]);
+        this.upper = ko.observable(-1);
+        this.lower = ko.observable(-1);
+        this.unreadsCount = ko.observable(0);
+        this.unreadsCountVisibility = ko.computed((function () { return this.unreadsCount() > 0 }).bind(this));
 
-        self.isLogined = ko.observable(false);
-        self.connectButtonVisibility = ko.computed(function () { return !self.isLogined(); });
-        self.disconnectButtonVisibility = ko.computed(function () { return self.isLogined(); });
+        this.connectButtonVisibility = ko.computed((function () { return !this.isConnected(); }).bind(this));
+        this.disconnectButtonVisibility = ko.computed((function () { return this.isConnected(); }).bind(this));
 
-        self.post = function (sender, e) {
+        this.post = function (sender, e) {
             let uri = $(sender).attr('action');
             let data = {
-                'text': self.text()
+                'text': this.text()
             };
 
-            $.post(uri, data, self.onPost, 'json');
+            $.post(uri, data, (function (response, status) { this.onPost(response, status) }).bind(this), 'json');
         };
 
-        self.onPost = function (response, status) {
+        this.onPost = function (response, status) {
             if (status != 'success') return;
 
-            // self.refresh();
-            self.text('');
+            // this.refresh();
+            this.text('');
         };
 
-        self.refresh = function () {
-            let uri = $('#messages').attr('data-uri-selection');
-            let params = {
-                lower: self.upper() + 1
+        this.refresh = function () {
+            let linesUri = $('#messages').attr('data-uri-selection');
+            let linesParams = {
+                lower: this.upper() + 1
             };
 
-            $.getJSON(uri, params, self.refreshTimeline);
+            let propsUri = '/.repos/properties/';
+            let propsParams = {};
+
+            $.getJSON(linesUri, linesParams, (function (response, status) { this.refreshTimeline(response, status) }).bind(this));
+            $.getJSON(propsUri, propsParams, (function (response, status) { this.refreshProperties(response, status) }).bind(this));
         };
 
-        self.refreshTimeline = function (responce, status) {
-            if (status != 'success' || responce.lines.length == 0) return;
+        this.refreshTimeline = function (response, status) {
+            if (status != 'success' || response.lines.length == 0) return;
 
-            // ViewModel にあるまじき View の操作
-            // というかこのオブジェクトそもそも ViewModel じゃない
             var windowHeight = $(window).height();
             var contentHeight = $('#framework').height();
             var scrollOffset = $(window).scrollTop();
 
-            for (var i = 0; i < responce.lines.length; i++) {
-                responce.lines[i].createdAt = ko.observable(new Date(responce.lines[i].createdAt));
-                responce.lines[i].createdAtText = ko.observable(responce.lines[i].createdAt().toLocaleString());
-                self.lines.push(responce.lines[i]);
+            for (var i = 0; i < response.lines.length; i++) {
+                response.lines[i].createdAt = ko.observable(new Date(response.lines[i].createdAt));
+                response.lines[i].createdAtText = ko.observable(response.lines[i].createdAt().toLocaleString());
+                this.lines.push(response.lines[i]);
             };
 
-            self.upper(responce.upper);
-            self.lower(responce.lower);
+            this.upper(response.upper);
+            this.lower(response.lower);
 
             if (contentHeight - windowHeight == scrollOffset) {
                 $(window).scrollTop($('.messagesViewItem').last().offset().top);
             }
             else {
-                self.unreadsCount(self.unreadsCount() + responce.lines.length);
+                this.unreadsCount(this.unreadsCount() + response.lines.length);
             }
         };
 
-        self.connect = function (sender, e) {
-            let uri = $('#connectButton').attr('href');
+        this.refreshProperties = function (response, status) {
+            if (status != 'success') return;
 
-            console.log(uri);
+            this.isConnected(response.isConnected);
+            this.userName(response.userName);
+            this.hostName(response.hostName);
+        }
+
+        this.connect = function (sender, e) {
+            let uri = $('#connectButton').attr('href');
 
             $.post(uri, {}, (function (response, status) {
                 if (status != "success") return;
 
-                self.isConnected(response.isConnected);
-            }));
+                this.isConnected(response.isConnected);
+            }).bind(this));
         };
 
-        self.disconnect = function (sender, e) {
+        this.disconnect = function (sender, e) {
             let uri = $('#disconnectButton').attr('href');
 
             $.post(uri, {}, (function (response, status) {
                 if (status != "success") return;
 
-                self.isConnected(response.isConnected);
-            }));
+                this.isConnected(response.isConnected);
+            }).bind(this));
         };
 
-        setInterval(self.refresh, 1000);
+        $(window).scroll((function () {
+            var windowHeight = $(window).height();
+            var contentHeight = $('#framework').height();
+            var scrollOffset = $(window).scrollTop();
+            
+            if (contentHeight - windowHeight == scrollOffset) {
+                this.unreadsCount(0);
+            }
+        }).bind(this));
+
+        setInterval((() => this.refresh()).bind(this), 1000);
 
         return this;
     }
 
-    ko.applyBindings(TimelinePageViewModel());
+    ko.applyBindings(mainPageScript());
 });

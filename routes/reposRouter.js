@@ -32,7 +32,10 @@ router.post("/lines/create", (req, res, next) => {
 
 // ログイン
 router.post('/connection/connect', (req, res, next) => {
-    if (req.minecraft.isConnected) return;
+    if (req.minecraft.isConnected) {
+        res.json({ "isConnected": true });
+        return;
+    }
 
     req.minecraft.connect((error) => {
         if (error) throw error;
@@ -45,7 +48,10 @@ router.post('/connection/connect', (req, res, next) => {
 
 // ログアウト
 router.post('/connection/disconnect', (req, res, next) => {
-    if (!req.minecraft.isConnected) return;
+    if (!req.minecraft.isConnected) {
+        res.json({ "isConnected": false });
+        return;
+    }
 
     req.minecraft.disconnect((error) => {
         if (error) throw error;
@@ -54,6 +60,17 @@ router.post('/connection/disconnect', (req, res, next) => {
             "isConnected": false
         });
     });
+});
+
+// プロパティ
+router.get('/properties/', (req, res, next) => {
+    res.json({
+        'isConnected': req.minecraft.isConnected,
+        'userName': req.minecraft.userName,
+        'hostName': req.minecraft.hostName,
+        'host': req.minecraft.host,
+        'port': req.minecraft.port
+    })
 });
 
 module.exports = router;

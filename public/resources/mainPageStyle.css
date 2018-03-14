@@ -26,7 +26,6 @@ html,body
 
 #framework > footer
 {
-    display: flex;
     position: fixed;
     width: auto;
     height: 40px;
@@ -121,4 +120,23 @@ html,body
 .messagesView .messagesViewItem .actions li:last-child
 {
     margin-right: 0px;
+}
+
+#unreadsCount
+{
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    top: auto;
+    bottom: 0px;
+    left: 20px;
+    right: auto;
+    margin-bottom: 0px;
+    text-align: center;
+    color: #000000;
+}
+
+#unreadsCount .symbolIconFontStyle
+{
+    margin-right: 4px;
 }

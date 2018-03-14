@@ -53,7 +53,7 @@ app.use('/.repos', reposRouter);
 
 app.get("/", (req, res) => {
     res.render("mainPage", {
-        user: req.minecraft.user,
+        userName: req.minecraft.userName,
         hostName: req.minecraft.hostName
     });
 });

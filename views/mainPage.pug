@@ -13,9 +13,9 @@ html(lang="ja")
     div#framework
         header.clearfix
           h1#logo
-            a(href="/")= hostName
+            a(href="/" data-bind="text: hostName")= hostName
           div#nameCard
-            p#name= user
+            p#name(data-bind="text: userName")= userName
             p
               a#connectButton(href="/.repos/connection/connect/" data-bind="visible: connectButtonVisibility, click: connect") 接続
               a#disconnectButton(href="/.repos/connection/disconnect/" data-bind="visible: disconnectButtonVisibility, click: disconnect") 切断
@@ -25,8 +25,10 @@ html(lang="ja")
               p.createdTime(data-bind="text: createdAtText")
               p.body(data-bind="text: text")
         footer.clearfix
-          p#unreadsCount(data-bind="text: unreadsCount, visible: unreadsCountVisibility")
+          p#unreadsCount(data-bind="visible: unreadsCountVisibility")
+            span.symbolIconFontStyle!= "&#xE7E7;"
+            span.value(data-bind="text: unreadsCount")
           form#sendingMessage(method="post" action="/.repos/lines/create/" data-bind="submit: post")
             p#submit
               input#body.symbolIconFontStyle(name="text" type="text" value="" data-bind="textInput: text" required="required" autofocus="autofocus")
-              button.symbolIconFontStyle(type="submit")!= "送信"
+              button.symbolIconFontStyle(type="submit")!= "&#xE724;"

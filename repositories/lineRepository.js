@@ -59,10 +59,8 @@ var lineRepository = function (mysql) {
     self.send = function (text, mode = 'programmatically') {
         if (mode == 'programmatically' && (!self.canSend(text) || !self.canSendInternal(text))) throw new Error();
 
-        if (mode == 'programmatically') {
-            self.lastSentMessage = text;
-            self.lastSentTime = (new Date).getTime();
-        }
+        self.lastSentMessage = text;
+        self.lastSentTime = (new Date).getTime();
 
         self.onSent(text);
     }
