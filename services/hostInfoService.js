@@ -5,7 +5,7 @@ var hostInfoService = function () {
 
     self.getHostInfoAsync = function () {
         let hostInfo = null;
-        let p = new Promise((resolve, eject) => {
+        let p = new Promise((resolve, reject) => {
             request.get(uri,
                 {
                     'timeout': 4 * 1000,

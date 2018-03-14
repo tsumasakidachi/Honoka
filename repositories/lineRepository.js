@@ -12,7 +12,7 @@ var lineRepository = function (mysql) {
     self.translation = require('../lang.json');
 
     self.getAsync = function (options) {
-        let p = new Promise((resolve, eject) => {
+        let p = new Promise((resolve, reject) => {
             let query = 'select `id`, `created_at` as `createdAt`, `host_name` as `hostName`, `type`, `player`, `text` from `lines`';
             let params = [];
 

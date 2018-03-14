@@ -13,7 +13,7 @@ var echo = function (lineRepository, hostInfoService, factorioService) {
 
         var status = isOnline ? 'オンライン' : 'オフライン';
 
-        self.lineRepository.send('Factorio マルチ鯖: ' + hostInfo.address + ' ' + status);
+        self.lineRepository.send('Factorio マルチ開催中: ' + hostInfo.address + ' ' + status);
     };
 
     self.lineRepository.onReceived(((line) => self.asnwerFactorio(line)).bind(self));
