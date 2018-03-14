@@ -9,17 +9,6 @@ var line = function (line) {
     self.player = line.player;
     self.text = line.text;
 
-    if (self.host in settings.chatFormat) {
-        if (matches = self.message.match(new RegExp(settings.chatFormat[self.host]['chat']['regex'], 'i'))) {
-            self.player = matches[1];
-            self.body = matches[2];
-        }
-        else if (matches = self.message.match(new RegExp(settings.chatFormat[self.host]['wisper']['regex'], 'i'))) {
-            self.player = matches[1];
-            self.body = matches[2];
-        }
-    }
-
     return this;
 }
 

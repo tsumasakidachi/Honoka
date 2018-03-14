@@ -14,12 +14,10 @@ var mysql = require("mysql").createConnection(
 var hostInfoService = require('../services/hostInfoService.js')();
 var factorioService = require('../services/factorioService.js')();
 var lineRepository = require("../repositories/lineRepository.js")(mysql);
+var echoService = require('../services/echoService.js')(lineRepository, hostInfoService, factorioService);
 
 lineRepository.canSend = () => true
 lineRepository.send = (text) => console.log(text);
-
-// Behaviors
-var echo = require('../behaviors/echo.js')(lineRepository, hostInfoService, factorioService);
 
 lineRepository.receive('localhost:25565', {
     json: {},

@@ -3,7 +3,7 @@ var hostInfoService = function () {
     let self = this;
     let uri = 'http://tmsk.s1001.xrea.com/files/hostinfo/';
 
-    self.getAsync = function () {
+    self.getHostInfoAsync = function () {
         let hostInfo = null;
         let p = new Promise((resolve, eject) => {
             request.get(uri,

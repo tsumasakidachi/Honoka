@@ -52,7 +52,7 @@ var reposRouter = require('./routes/reposRouter.js');
 app.use('/.repos', reposRouter);
 
 app.get("/", (req, res) => {
-    res.render("timelinePage", {
+    res.render("mainPage", {
         user: req.minecraft.user,
         hostName: req.minecraft.hostName
     });

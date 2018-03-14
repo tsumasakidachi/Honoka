@@ -12,14 +12,10 @@
     },
     "chatFormat": {
         "default": {
-            "chat": {
-                "regex": "^<(\\w+)>\\s+(.+)?$",
-                "description": "default chat"
-            },
-            "wisper": {
-                "regex": "^([\\w_]+) whispers: (.+)$",
-                "description": "default wisper"
-            }
+            "chat": "^<(\\w+)>\\s+(.+)?$",
+            "wisper": "^([\\w_]+) whispers: (.+)$",
+            "join": "^([\\w_]+) joined the game$",
+            "left": "^([\\w_]+) left the game$"
         }
     }
 }

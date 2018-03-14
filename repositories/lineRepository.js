@@ -11,50 +11,59 @@ var lineRepository = function (mysql) {
     self.lastSentMessage = '';
     self.translation = require('../lang.json');
 
-    self.get = function (options, callback) {
-        let query = 'select `id`, `created_at` as `createdAt`, `host_name` as `hostName`, `type`, `player`, `text` from `lines`';
-        let params = [];
+    self.getAsync = function (options) {
+        let p = new Promise((resolve, eject) => {
+            let query = 'select `id`, `created_at` as `createdAt`, `host_name` as `hostName`, `type`, `player`, `text` from `lines`';
+            let params = [];
 
-        query += ' where host_name = ?';
-        params.push(options.hostName)
+            query += ' where host_name = ?';
+            params.push(options.hostName)
 
-        if (options.upper && typeof options.upper == 'number') {
-            query += ' and `id` <= ?';
-            params.push(options.upper);
-        }
+            if (options.upper && typeof options.upper == 'number') {
+                query += ' and `id` <= ?';
+                params.push(options.upper);
+            }
 
-        if (options.lower && typeof options.lower == 'number') {
-            query += ' and `id` >= ?';
-            params.push(options.lower);
-        }
+            if (options.lower && typeof options.lower == 'number') {
+                query += ' and `id` >= ?';
+                params.push(options.lower);
+            }
 
-        query += ' order by `id` desc';
+            query += ' order by `id` desc';
 
-        query += ' limit ?';
+            query += ' limit ?';
 
-        if (options.count && typeof options.count == 'number' && options.count <= 100) {
-            params.push(options.count);
-        }
-        else {
-            params.push(100)
-        }
+            if (options.count && typeof options.count == 'number' && options.count <= 1000) {
+                params.push(options.count);
+            }
+            else {
+                params.push(1000)
+            }
 
-        mysql.query(query, params, (error, rows, fields) => {
-            if (error) throw error;
+            mysql.query(query, params, (error, rows, fields) => {
+                if (error) throw new Error(error);
 
-            rows.forEach((row) => {
-                row = line(row);
+                rows.forEach((row) => {
+                    row = line(row);
+                });
+
+                rows = rows.reverse();
+
+                resolve(rows);
             });
-
-            callback(error, rows, fields);
         });
+
+        return p;
     }
 
-    self.send = function (text) {
-        if (!self.canSend(text) || !self.canSendInternal(text)) throw new Error();
+    self.send = function (text, mode = 'programmatically') {
+        if (mode == 'programmatically' && (!self.canSend(text) || !self.canSendInternal(text))) throw new Error();
 
-        self.lastSentMessage = text;
-        self.lastSentTime = (new Date).getTime();
+        if (mode == 'programmatically') {
+            self.lastSentMessage = text;
+            self.lastSentTime = (new Date).getTime();
+        }
+
         self.onSent(text);
     }
 
@@ -78,9 +87,12 @@ var lineRepository = function (mysql) {
     }
 
     self.receive = (hostName, msg) => {
-        var l = self.parse(hostName, msg, new Date());
-        executeOnReceived.forEach((callback) => callback(l));
-        self.save(l);
+        var line = self.parse(hostName, msg, new Date());
+        self.save(line);
+
+        for (var i = 0; i < executeOnReceived.length; i++) {
+            executeOnReceived[i](line);
+        }
     }
 
     self.onReceived = function (callback) {
@@ -104,7 +116,7 @@ var lineRepository = function (mysql) {
                 let parsed = self.parse(hostName, w, receivedTime);
                 return parsed.text;
             });
-            
+
             l.text = sprintf(self.translation[msg.translate], ...texts);
         }
         else if ('translate' in msg) {
@@ -123,22 +135,28 @@ var lineRepository = function (mysql) {
         }
 
         // プレイヤーと本文の切り出し
-        if (l.hostName in settings.chatFormat) {
-            if (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['chat']['regex'], 'i'))) {
-                l.type = 'chat';
-                l.player = matches[1];
-                l.body = matches[2];
-            }
-            else if (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['wisper']['regex'], 'i'))) {
-                l.type = 'wisper';
-                l.player = matches[1];
-                l.body = matches[2];
-            }
-            else {
-                l.type = 'notice';
-                l.player = null;
-                l.body = l.text;
-            }
+        if (settings.chatFormat[l.hostName]['chat'] && (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['chat'], 'i')))) {
+            l.type = 'chat';
+            l.player = matches[1];
+            l.body = matches[2];
+        }
+        else if (settings.chatFormat[l.hostName]['chat'] && (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['wisper'], 'i')))) {
+            l.type = 'wisper';
+            l.player = matches[1];
+            l.body = matches[2];
+        }
+        else if (settings.chatFormat[l.hostName]['join'] && (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['join'], 'i')))) {
+            l.type = 'join';
+            l.player = matches[1];
+        }
+        else if (settings.chatFormat[l.hostName]['left'] && (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['left'], 'i')))) {
+            l.type = 'left';
+            l.player = matches[1];
+        }
+        else {
+            l.type = 'notice';
+            l.player = null;
+            l.body = l.text;
         }
 
         return l;

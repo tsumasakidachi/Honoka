@@ -4,7 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 
 // メッセージ
-router.get('/lines', (req, res, next) => {
+router.get('/lines', async (req, res, next) => {
     let options = {
         hostName: req.minecraft.hostName,
         upper: parseInt(req.query.upper) || null,
@@ -12,29 +12,27 @@ router.get('/lines', (req, res, next) => {
         count: parseInt(req.query.count) || null
     };
 
-    req.line.get(options, (error, rows, fields) => {
-        let ids = rows.map((r) => r.id);
+    let lines = await req.line.getAsync(options);
+    let ids = lines.map((l) => l.id);
 
-        res.json({
-            upper: Math.max(...ids),
-            lower: Math.min(...ids),
-            lines: rows
-        })
-
-    });
+    res.json({
+        upper: Math.max(...ids),
+        lower: Math.min(...ids),
+        lines: lines
+    })
 });
 
 // 新しいメッセージ
 router.post("/lines/create", (req, res, next) => {
     if (!req.body.text) throw new Error("text が空です。");
 
-    req.line.send(req.body.text);
+    req.line.send(req.body.text, 'userTypes');
     res.json(null);
 });
 
 // ログイン
 router.post('/connection/connect', (req, res, next) => {
-    if(req.minecraft.isConnected) return;
+    if (req.minecraft.isConnected) return;
 
     req.minecraft.connect((error) => {
         if (error) throw error;
@@ -47,8 +45,8 @@ router.post('/connection/connect', (req, res, next) => {
 
 // ログアウト
 router.post('/connection/disconnect', (req, res, next) => {
-    if(!req.minecraft.isConnected) return;
-    
+    if (!req.minecraft.isConnected) return;
+
     req.minecraft.disconnect((error) => {
         if (error) throw error;
 

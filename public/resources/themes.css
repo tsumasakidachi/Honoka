@@ -77,12 +77,12 @@ a:hover
 
 #framework > header #nameCard
 {
-    padding: 10px 0px;
     float: right;
 }
 
 #framework > header #nameCard p
 {
+    margin-bottom: 0px;
     margin-right: 8px;
     margin-bottom: 0px;
     float: left;
@@ -207,7 +207,7 @@ a:hover
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* ボディ */
 
-#content
+#framework > #content
 {
     padding-top: 40px;
     padding-bottom: 40px;

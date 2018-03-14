@@ -1,12 +1,62 @@
-#content
+html,body
 {
-    padding-top: 0px;
+    height: 100%;
+}
+
+#framework
+{
+}
+
+#framework > header
+{
+    position: fixed;
+    width: auto;
+    height: 40px;
+    top: 0px;
+    bottom: auto;
+    left: 0px;
+    right: 0px;
+    background-color: #f6f6f6;
+    line-height: 40px;
+}
+
+#framework > #content
+{
+}
+
+#framework > footer
+{
+    display: flex;
+    position: fixed;
+    width: auto;
+    height: 40px;
+    top: auto;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: #f6f6f6;
+    line-height: 40px;
+}
+
+#framework > footer > *
+{
+    margin-right: 20px;
+}
+
+#framework > footer > *:last-child
+{
+    margin-right: 0px;
 }
 
 
 #sendingMessage
 {
-    margin-bottom: 40px;
+}
+
+#sendingMessage form,
+#sendingMessage form p
+{
+    margin-bottom: 0px;
 }
 
 #sendingMessage #body
@@ -21,36 +71,38 @@
 
 .messagesView .messagesViewItem
 {
+    display: flex;
+    align-items: flex-start;
     margin-bottom: 0px;
-}
-
-.messagesView .messagesViewItem .createdTime
-{
-    display: inline-block;
-    margin-bottom: 0px;
-    margin-right: 0.5em;
-}
-
-.messagesView .messagesViewItem .body
-{
-    display: inline-block;
     color: #808080;
 }
 
-.messagesView .messagesViewItem.chat .body
+.messagesView .messagesViewItem.chat,
+.messagesView .messagesViewItem.wisper,
+.messagesView .messagesViewItem.join,
+.messagesView .messagesViewItem.leave
 {
     color: #000000;
 }
 
-.messagesView .messagesViewItem .body p
+.messagesView .messagesViewItem.error
 {
-    display: inline-block;
-    white-space: pre-line;
+    color: #996666;
 }
 
-.messagesView .messagesViewItem .body p:last-child
+.messagesView .messagesViewItem .createdTime
 {
     margin-bottom: 0px;
+    display: inline-block;
+    margin-bottom: 0px;
+    margin-right: 0.5em;
+    color: #808080;
+}
+
+.messagesView .messagesViewItem p
+{
+    margin-bottom: 0px;
+    white-space: pre-line;
 }
 
 .messagesView .messagesViewItem .actions

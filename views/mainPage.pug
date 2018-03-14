@@ -20,12 +20,13 @@ html(lang="ja")
               a#connectButton(href="/.repos/connection/connect/" data-bind="visible: connectButtonVisibility, click: connect") 接続
               a#disconnectButton(href="/.repos/connection/disconnect/" data-bind="visible: disconnectButtonVisibility, click: disconnect") 切断
         article#content
+          div#messages.listview.messagesView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
+            div.messagesViewItem(data-bind="css: type")
+              p.createdTime(data-bind="text: createdAtText")
+              p.body(data-bind="text: text")
+        footer.clearfix
+          p#unreadsCount(data-bind="text: unreadsCount, visible: unreadsCountVisibility")
           form#sendingMessage(method="post" action="/.repos/lines/create/" data-bind="submit: post")
             p#submit
               input#body.symbolIconFontStyle(name="text" type="text" value="" data-bind="textInput: text" required="required" autofocus="autofocus")
               button.symbolIconFontStyle(type="submit")!= "送信"
-          div#messages.listview.messagesView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
-            div.messagesViewItem(data-bind="css: type")
-              p.createdTime(data-bind="text: createdAtText")
-              div.body
-                p(data-bind="text: text")

@@ -7,6 +7,8 @@ $(function () {
         self.upper = ko.observable(-1);
         self.lower = ko.observable(-1);
         self.text = ko.observable('');
+        self.unreadsCount = ko.observable(0);
+        self.unreadsCountVisibility = ko.computed(() => self.unreadsCount > 0);
 
         self.isLogined = ko.observable(false);
         self.connectButtonVisibility = ko.computed(function () { return !self.isLogined(); });
@@ -34,22 +36,33 @@ $(function () {
                 lower: self.upper() + 1
             };
 
-            $.getJSON(uri, params, self.onTimelineRefreshed);
+            $.getJSON(uri, params, self.refreshTimeline);
         };
 
-        self.onTimelineRefreshed = function (responce, status) {
+        self.refreshTimeline = function (responce, status) {
             if (status != 'success' || responce.lines.length == 0) return;
 
-            responce.lines = responce.lines.reverse();
+            // ViewModel にあるまじき View の操作
+            // というかこのオブジェクトそもそも ViewModel じゃない
+            var windowHeight = $(window).height();
+            var contentHeight = $('#framework').height();
+            var scrollOffset = $(window).scrollTop();
 
             for (var i = 0; i < responce.lines.length; i++) {
                 responce.lines[i].createdAt = ko.observable(new Date(responce.lines[i].createdAt));
                 responce.lines[i].createdAtText = ko.observable(responce.lines[i].createdAt().toLocaleString());
-                self.lines.unshift(responce.lines[i]);
+                self.lines.push(responce.lines[i]);
             };
 
             self.upper(responce.upper);
             self.lower(responce.lower);
+
+            if (contentHeight - windowHeight == scrollOffset) {
+                $(window).scrollTop($('.messagesViewItem').last().offset().top);
+            }
+            else {
+                self.unreadsCount(self.unreadsCount() + responce.lines.length);
+            }
         };
 
         self.connect = function (sender, e) {
@@ -72,9 +85,9 @@ $(function () {
 
                 self.isConnected(response.isConnected);
             }));
-        },
+        };
 
-            setInterval(self.refresh, 1000);
+        setInterval(self.refresh, 1000);
 
         return this;
     }
