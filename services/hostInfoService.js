@@ -15,6 +15,8 @@ var hostInfoService = function () {
                     }
                 },
                 function (error, response, body) {
+                    if(error) reject(error);
+                    
                     resolve(body);
                 });
         });

@@ -41,7 +41,7 @@ var lineRepository = function (mysql) {
             }
 
             mysql.query(query, params, (error, rows, fields) => {
-                if (error) throw new Error(error);
+                if (error) reject(error);
 
                 rows.forEach((row) => {
                     row = line(row);
