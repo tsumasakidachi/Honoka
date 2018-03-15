@@ -17,7 +17,7 @@ var lineRepository = require("../repositories/lineRepository.js")(mysql);
 var echoService = require('../services/echoService.js')(lineRepository, hostInfoService, factorioService);
 
 lineRepository.canSend = () => true
-lineRepository.send = (text) => console.log(text);
+lineRepository.onSent = (text) => console.log(text);
 
 lineRepository.receive('localhost:25565', {
     json: {},

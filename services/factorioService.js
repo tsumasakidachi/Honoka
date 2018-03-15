@@ -7,7 +7,9 @@ var factorioService = function () {
 
     self.isOnlineAsync = () => {
         var p = new Promise((resolve, reject) => {
-            exec(command, function (err, stdout, stderr) {
+            exec(command, function (error, stdout, stderr) {
+                if(error) reject(error);
+
                 let processes = new Csv(stdout, { 'header': true }).parse();
                 resolve(processes.length >= 1);
             });

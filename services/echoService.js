@@ -5,8 +5,12 @@ var echo = function (lineRepository, hostInfoService, factorioService) {
     self.hostInfoService = hostInfoService;
     self.factorioService = factorioService;
 
+    self.echo = (line) => {
+        self.asnwerFactorio(line);
+    }
+
     self.asnwerFactorio = async (line) => {
-        if (!line.body || !line.body.match(/(factorio|ファクトリオ|ふぁくとりお)/i)) return;
+        if (!line.body || !line.body.match(/^(factorio|ファクトリオ|ふぁくとりお)$/i)) return;
 
         var hostInfo = await self.hostInfoService.getHostInfoAsync();
         var isOnline = await self.factorioService.isOnlineAsync();
@@ -16,7 +20,7 @@ var echo = function (lineRepository, hostInfoService, factorioService) {
         self.lineRepository.send('Factorio マルチ開催中: ' + hostInfo.address + ' ' + status);
     };
 
-    self.lineRepository.onReceived(((line) => self.asnwerFactorio(line)).bind(self));
+    self.lineRepository.onReceived(((line) => self.echo(line)).bind(self));
 
     return this;
 }

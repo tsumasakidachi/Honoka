@@ -9,6 +9,23 @@ var line = function (line) {
     self.player = line.player;
     self.text = line.text;
 
+    switch (self.type) {
+        case 'error':
+            self.typeSymbol = '&#xE814;';
+            break;
+        case 'wisper':
+            self.typeSymbol = '&#xE8BD;';
+            break;
+        case 'join':
+            self.typeSymbol = '&#xE72A;';
+            break;
+        case 'leave':
+            self.typeSymbol = '&#xE72B;';
+            break;
+        default:
+            self.typeSymbol = null
+    }
+
     return this;
 }
 

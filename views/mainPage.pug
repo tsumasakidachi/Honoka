@@ -23,12 +23,13 @@ html(lang="ja")
           div#messages.listview.messagesView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
             div.messagesViewItem(data-bind="css: type")
               p.createdTime(data-bind="text: createdAtText")
+              p.type.symbolIconFontStyle(data-bind="html: typeSymbol")
               p.body(data-bind="text: text")
         footer.clearfix
           p#unreadsCount(data-bind="visible: unreadsCountVisibility")
             span.symbolIconFontStyle!= "&#xE7E7;"
             span.value(data-bind="text: unreadsCount")
-          form#sendingMessage(method="post" action="/.repos/lines/create/" data-bind="submit: post")
+          form#sendingMessage(method="post" action="/.repos/lines/create/" data-bind="submit: post, visible: isConnected")
             p#submit
               input#body.symbolIconFontStyle(name="text" type="text" value="" data-bind="textInput: text" required="required" autofocus="autofocus")
               button.symbolIconFontStyle(type="submit")!= "&#xE724;"

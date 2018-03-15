@@ -5,14 +5,25 @@ $(function () {
         this.hostName = ko.observable('');
         this.text = ko.observable('');
 
-        this.lines = ko.observableArray([]);
-        this.upper = ko.observable(-1);
-        this.lower = ko.observable(-1);
-        this.unreadsCount = ko.observable(0);
-        this.unreadsCountVisibility = ko.computed((function () { return this.unreadsCount() > 0 }).bind(this));
+        this.isRefreshWorking = ko.observable(false);
 
-        this.connectButtonVisibility = ko.computed((function () { return !this.isConnected(); }).bind(this));
-        this.disconnectButtonVisibility = ko.computed((function () { return this.isConnected(); }).bind(this));
+        this.lines = ko.observableArray([]);
+
+        this.upper = ko.computed((function () {
+            let ids = this.lines().map((function (l) { return l.id; }).bind(this));
+            return Math.max(...ids);
+        }).bind(this));
+
+        this.lower = ko.computed((function () {
+            let ids = this.lines().map((function (l) { return l.id; }).bind(this));
+            return Math.min(...ids);
+        }).bind(this));
+
+        this.unreadsCount = ko.observable(0);
+        this.unreadsCountVisibility = ko.pureComputed((function () { return this.isConnected() && this.unreadsCount() > 0 }).bind(this));
+
+        this.connectButtonVisibility = ko.pureComputed((function () { return !this.isConnected(); }).bind(this));
+        this.disconnectButtonVisibility = ko.pureComputed((function () { return this.isConnected(); }).bind(this));
 
         this.post = function (sender, e) {
             let uri = $(sender).attr('action');
@@ -31,41 +42,101 @@ $(function () {
         };
 
         this.refresh = function () {
-            let linesUri = $('#messages').attr('data-uri-selection');
-            let linesParams = {
-                lower: this.upper() + 1
-            };
+            if(!this.isRefreshWorking()) this.refreshLines('newer');
 
             let propsUri = '/.repos/properties/';
             let propsParams = {};
 
-            $.getJSON(linesUri, linesParams, (function (response, status) { this.refreshTimeline(response, status) }).bind(this));
             $.getJSON(propsUri, propsParams, (function (response, status) { this.refreshProperties(response, status) }).bind(this));
         };
 
-        this.refreshTimeline = function (response, status) {
-            if (status != 'success' || response.lines.length == 0) return;
+        this.refreshLines = function (mode) {
+            if (!mode || (mode != 'newer' && mode != 'older') || this.isRefreshWorking()) throw new Error();
 
-            var windowHeight = $(window).height();
-            var contentHeight = $('#framework').height();
-            var scrollOffset = $(window).scrollTop();
-
-            for (var i = 0; i < response.lines.length; i++) {
-                response.lines[i].createdAt = ko.observable(new Date(response.lines[i].createdAt));
-                response.lines[i].createdAtText = ko.observable(response.lines[i].createdAt().toLocaleString());
-                this.lines.push(response.lines[i]);
+            let uri = $('#messages').attr('data-uri-selection');
+            let params = {
+                count: 200
             };
 
-            this.upper(response.upper);
-            this.lower(response.lower);
+            if (mode == 'newer') {
+                params.lower = this.upper() + 1;
+                $.getJSON(uri, params, (function (response, status) { this.onGotNewerLines(response, status) }).bind(this));
+            }
+
+            if (mode == 'older' && this.lower() >= 0) {
+                params.upper = this.lower() - 1;
+                $.getJSON(uri, params, (function (response, status) { this.onGotOlderLines(response, status) }).bind(this));
+            }
+        }
+
+        this.onGotNewerLines = function (response, status) {
+            if (status != 'success' || response.lines.length == 0) return;
+
+            this.isRefreshWorking(true);
+
+            let windowHeight = $(window).height();
+            let contentHeight = $('#framework').height();
+            let scrollOffset = $(window).scrollTop();
+
+            response.lines = this.parseLines(response.lines);
+            response.lines.forEach((function (l) { this.lines.push(l); }).bind(this));
 
             if (contentHeight - windowHeight == scrollOffset) {
-                $(window).scrollTop($('.messagesViewItem').last().offset().top);
+                $(window).scrollTop($('.messagesView .messagesViewItem').last().offset().top);
             }
             else {
                 this.unreadsCount(this.unreadsCount() + response.lines.length);
             }
+
+            this.isRefreshWorking(false);
         };
+
+        this.onGotOlderLines = function (response, status) {
+            if (status != 'success' || response.lines.length == 0) return;
+
+            this.isRefreshWorking(true);
+
+            response.lines = this.parseLines(response.lines);
+            response.lines.reverse().forEach((function (l) { this.lines.unshift(l); }).bind(this));
+
+            let addedItemsHeight = $('.messagesView .messagesViewItem')
+                .filter(function (index) { return index >= 0 && index < response.lines.length; })
+                .map(function (index, element) { return $(element).height(); })
+                .toArray()
+                .reduce(function(prev, current) { return prev += current; });
+
+            let scrollOffset = $(window).scrollTop();
+            $(window).scrollTop(scrollOffset + addedItemsHeight);
+
+            this.isRefreshWorking(false);
+        }
+
+        this.parseLines = function (lines) {
+            for (let i = 0; i < lines.length; i++) {
+                lines[i].createdAt = new Date(lines[i].createdAt);
+                lines[i].createdAtText = lines[i].createdAt.toLocaleString();
+
+                switch (lines[i].type) {
+                    case 'error':
+                        lines[i].typeSymbol = '&#xE814;';
+                        break;
+                    case 'wisper':
+                        lines[i].typeSymbol = '&#xE8BD;';
+                        break;
+                    case 'join':
+                        lines[i].typeSymbol = '&#xE72A;';
+                        break;
+                    case 'leave':
+                        lines[i].typeSymbol = '&#xE72B;';
+                        break;
+                    default:
+                        lines[i].typeSymbol = '';
+                }
+            }
+
+            return lines;
+
+        }
 
         this.refreshProperties = function (response, status) {
             if (status != 'success') return;
@@ -96,13 +167,20 @@ $(function () {
         };
 
         $(window).scroll((function () {
-            var windowHeight = $(window).height();
-            var contentHeight = $('#framework').height();
-            var scrollOffset = $(window).scrollTop();
-            
+            let windowHeight = $(window).height();
+            let contentHeight = $('#framework').height();
+            let scrollOffset = $(window).scrollTop();
+
+            // ページの一番下に来たら新しいラインをリセットする
             if (contentHeight - windowHeight == scrollOffset) {
                 this.unreadsCount(0);
             }
+
+            // ページの一番上に来たら古いラインを取得する
+            if (scrollOffset <= 0 && !this.isRefreshWorking()) {
+                this.refreshLines('older');
+            }
+
         }).bind(this));
 
         setInterval((() => this.refresh()).bind(this), 1000);

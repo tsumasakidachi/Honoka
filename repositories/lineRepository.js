@@ -1,12 +1,10 @@
 var lineRepository = function (mysql) {
-    var settings = require('../settings.json');
-    var sprintf = require('sprintf-js').sprintf
-    var line = require('../models/line.js');
-    var executeOnReceived = [];
+    let settings = require('../settings.json');
+    let sprintf = require('sprintf-js').sprintf
+    let executeOnReceived = [];
 
     self = this;
-
-    self.cooldownTime = 800;
+    self.cooldownTime = 5000;
     self.lastSentTime = null;
     self.lastSentMessage = '';
     self.translation = require('../lang.json');
@@ -43,11 +41,20 @@ var lineRepository = function (mysql) {
             mysql.query(query, params, (error, rows, fields) => {
                 if (error) reject(error);
 
-                rows.forEach((row) => {
-                    row = line(row);
-                });
-
                 rows = rows.reverse();
+                resolve(rows);
+            });
+        });
+
+        return p;
+    }
+
+    self.countDiurnalAsync = function () {
+        let p = new Promise((resolve, reject) => {
+            let query = 'select date(`created_at`) as `date`, count(*) as `count` from `lines` group by `date`;';
+
+            mysql.query(query, [], (error, rows, fields) => {
+                if (error) reject(error);
 
                 resolve(rows);
             });
@@ -57,12 +64,14 @@ var lineRepository = function (mysql) {
     }
 
     self.send = function (text, mode = 'programmatically') {
-        if (mode == 'programmatically' && (!self.canSend(text) || !self.canSendInternal(text))) throw new Error();
-
-        self.lastSentMessage = text;
-        self.lastSentTime = (new Date).getTime();
+        if (!self.canSend(text) || !self.canSendInternal(text, mode)) throw new Error();
 
         self.onSent(text);
+
+        if (mode == 'programmatically') {
+            self.lastSentMessage = text;
+            self.lastSentTime = new Date();
+        }
     }
 
     self.onSent = function (text) { };
@@ -71,8 +80,12 @@ var lineRepository = function (mysql) {
         return false;
     }
 
-    self.canSendInternal = function (text) {
-        return text != self.lastSentMessage;
+    self.canSendInternal = function (text, mode) {
+        if (self.lastSentTime == null) return true;
+
+        let elapsed = (new Date()).getTime() - self.lastSentTime.getTime();
+
+        return mode != 'programmatically' || elapsed > self.cooldownTime;
     }
 
     self.save = function (line) {
@@ -85,10 +98,10 @@ var lineRepository = function (mysql) {
     }
 
     self.receive = (hostName, msg) => {
-        var line = self.parse(hostName, msg, new Date());
+        let line = self.parse(hostName, msg, new Date());
         self.save(line);
 
-        for (var i = 0; i < executeOnReceived.length; i++) {
+        for (let i = 0; i < executeOnReceived.length; i++) {
             executeOnReceived[i](line);
         }
     }
@@ -98,7 +111,7 @@ var lineRepository = function (mysql) {
     }
 
     self.parse = function (hostName, msg, receivedTime) {
-        var l = {};
+        let l = {};
         l.hostName = hostName;
         l.createdAt = receivedTime;
         l.type = 'chat';
@@ -124,7 +137,7 @@ var lineRepository = function (mysql) {
             l.text = '';
             l.inline = msg.extra.map((e) => self.parse(hostName, e, receivedTime));
 
-            for (var i = 0; i < l.inline.length; i++) {
+            for (let i = 0; i < l.inline.length; i++) {
                 l.text += l.inline[i].text;
             }
         }
@@ -147,8 +160,8 @@ var lineRepository = function (mysql) {
             l.type = 'join';
             l.player = matches[1];
         }
-        else if (settings.chatFormat[l.hostName]['left'] && (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['left'], 'i')))) {
-            l.type = 'left';
+        else if (settings.chatFormat[l.hostName]['leave'] && (matches = l.text.match(new RegExp(settings.chatFormat[l.hostName]['leave'], 'i')))) {
+            l.type = 'leave';
             l.player = matches[1];
         }
         else {

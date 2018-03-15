@@ -72,6 +72,7 @@ html,body
 {
     display: flex;
     align-items: flex-start;
+    flex-wrap: nowrap;
     margin-bottom: 0px;
     color: #808080;
 }
@@ -86,40 +87,24 @@ html,body
 
 .messagesView .messagesViewItem.error
 {
-    color: #996666;
+    color: #cc3333;
+}
+
+.messagesView .messagesViewItem > *
+{
+    margin-bottom: 4px;
+    white-space: pre-line;
 }
 
 .messagesView .messagesViewItem .createdTime
 {
-    margin-bottom: 0px;
-    display: inline-block;
-    margin-bottom: 0px;
-    margin-right: 0.5em;
+    width: 180px;
     color: #808080;
 }
 
-.messagesView .messagesViewItem p
+.messagesView .messagesViewItem .type
 {
-    margin-bottom: 0px;
-    white-space: pre-line;
-}
-
-.messagesView .messagesViewItem .actions
-{
-    margin-top: 6px;
-    margin-left: 0px;
-    list-style-type: none;
-}
-
-.messagesView .messagesViewItem .actions li
-{
-    margin-right: 8px;
-    display: inline-block;
-}
-
-.messagesView .messagesViewItem .actions li:last-child
-{
-    margin-right: 0px;
+    width: 32px;
 }
 
 #unreadsCount

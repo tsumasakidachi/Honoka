@@ -15,7 +15,7 @@
             "chat": "^<(\\w+)>\\s+(.+)?$",
             "wisper": "^([\\w_]+) whispers: (.+)$",
             "join": "^([\\w_]+) joined the game$",
-            "left": "^([\\w_]+) left the game$"
+            "leave": "^([\\w_]+) left the game$"
         }
     }
 }
