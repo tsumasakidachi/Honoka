@@ -35,173 +35,114 @@ a:hover
     margin-bottom: 0px;
 }
 
+#framework > *
+{
+    margin-bottom: 0px;
+}
+
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* ヘッダ */
 
 #framework > header
 {
-    padding: 0px 80px;
-}
-
-#framework > header #logo
-{
-    margin-right: 40px;
-    margin-bottom: 0px;
-    padding: 0px;
-    float: left;
+    padding-left: 40px;
+    padding-right: 40px;
     line-height: 40px;
-    font-weight: 500;
+    display: flex;
 }
 
-#framework > header #logo a
+#framework > header .navigations
 {
-    display: block;
+    flex: 1 1 auto;
 }
 
-#framework > header #logo a:link,
-#framework > header #logo a:visited
+#framework > header .commands
+{
+    flex: 0 0 auto;
+}
+
+#framework > header .commands > *
+{
+    margin-bottom: 0px;
+}
+
+#framework > header .commands > .listView
+{
+    margin-bottom: 0px;
+}
+
+#framework > header .commands > .listView > .listViewItem
+{
+    margin-right: 12px;
+    margin-bottom: 0px;
+    display: inline-block;
+}
+
+#framework > header .commands > ul > li:last-child
+{
+    margin-right: 0px;
+}
+
+#framework > header a:link,
+#framework > header a:visited
 {
     color: #000000;
 }
 
-#framework > header #logo a:active,
-#framework > header #logo a:hover
-{
-    color: #333333;
-}
-
-#framework > header #logo a img
-{
-    display: block;
-}
-
-#framework > header #nameCard
-{
-    float: right;
-}
-
-#framework > header #nameCard p
-{
-    margin-bottom: 0px;
-    margin-right: 8px;
-    margin-bottom: 0px;
-    float: left;
-    color: #c0c0c0;
-}
-
-#framework > header #nameCard p:last-child
-{
-    margin-right: 0px;
-}
-
-#framework > header #nameCard a:link,
-#framework > header #nameCard a:visited
-{
-    color: #808080;
-}
-
-#framework > header #nameCard a:active,
-#framework > header #nameCard a:hover
-{
-    color: #909090;
-}
-
-#framework > header #nameCard p#name
+#framework > header a:active,
+#framework > header a:hover
 {
     color: #666666;
 }
 
-#framework > header nav
+#framework > header a img
 {
-    margin-right: 40px;
-    padding: 10px 0px;
-    float: left;
+    display: inline-block;
 }
 
-#framework > header nav ul
+#framework > header #logo
 {
-    margin: 0px;
-    list-style-type: none;
+    margin-bottom: 0px;
+    line-height: 40px;
 }
 
-#framework > header nav ul li
+#framework > header nav > .listView
 {
-    margin-right: 12px;
-    float: left;
+    margin-bottom: 0px;
+    margin-right: 20px;
+    display: inline-block;
 }
 
-#framework > header nav ul li:last-child
+#framework > header nav > .listView .listViewItem
+{
+    margin-bottom: 0px;
+    margin-right: 20px;
+    display: inline-block;
+}
+
+#framework > header nav > .listView .listViewItem:last-child
 {
     margin-right: 0px;
 }
 
-#framework > header nav ul li a
+#framework > header nav .listView .listViewItem a:link,
+#framework > header nav .listView .listViewItem a:visited
 {
-    display: block;
+    color: #808080;
 }
 
-#framework > header nav ul li a:link,
-#framework > header nav ul li a:visited
+#framework > header nav .listView .listViewItem a:active,
+#framework > header nav .listView .listViewItem a:hover
 {
-    color: #c0c0c0;
+    color: #000000;
 }
 
-#framework > header nav ul li a:active,
-#framework > header nav ul li a:hover
+#framework > header nav .listView .listViewItem.selectedItem a:link,
+#framework > header nav .listView .listViewItem.selectedItem a:visited,
+#framework > header nav .listView .listViewItem.selectedItem a:active,
+#framework > header nav .listView .listViewItem.selectedItem a:hover
 {
-    color: #ffffff;
-}
-
-#framework > header nav ul li.selectedItem a:link,
-#framework > header nav ul li.selectedItem a:visited
-{
-    color: #00B5B5;
-}
-
-#framework > header nav ul li.selectedItem a:active,
-#framework > header nav ul li.selectedItem a:hover
-{
-    color: #68D9D9;
-}
-
-#framework > header #commandBar
-{
-    margin: 0px;
-    padding: 10px 0px;
-    float: left;
-}
-
-#framework > header #commandBar ul
-{
-    margin: 0px;
-    list-style-type: none;
-    letter-spacing: -1em;
-}
-
-#framework > header #commandBar ul > li
-{
-    display: inline-block;
-    letter-spacing: 0em;
-}
-
-#framework > header #commandBar ul > li a
-{
-    margin-right: 12px;
-    display: block;
-    color: #e0e0e0;
-}
-
-#framework > header #commandBar ul > li a:last-child
-{
-}
-
-#framework > header #commandBar ul > li a:link, #framework > header #commandBar ul > li a:visited
-{
-}
-
-#framework > header #commandBar ul > li a:active, #framework > header #commandBar ul > li a:hover
-{
-    color: #fff;
+    color: #000000;
 }
 
 /* ------------------------------------------------------------------------------------------------------------------ */
@@ -211,8 +152,8 @@ a:hover
 {
     padding-top: 40px;
     padding-bottom: 40px;
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-left: 40px;
+    padding-right: 40px;
     clear: both;
 }
 
@@ -221,8 +162,8 @@ a:hover
 
 #framework > footer
 {
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-left: 40px;
+    padding-right: 40px;
     position: absolute;
     bottom: 0px;
     clear: both;

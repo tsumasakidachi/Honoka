@@ -9,19 +9,30 @@ html,body
 
 #framework > header
 {
+    padding-bottom: 8px;
     position: fixed;
     width: auto;
-    height: 40px;
     top: 0px;
     bottom: auto;
     left: 0px;
     right: 0px;
     background-color: #f6f6f6;
-    line-height: 40px;
+}
+
+#framework > header #logo
+{
+    display: none;
+}
+
+#framework > header nav
+{
+    margin-left: 40px;
 }
 
 #framework > #content
 {
+    padding-left: 0px;
+    padding-top: 48px;
 }
 
 #framework > footer
@@ -63,48 +74,107 @@ html,body
     width: 600px;
 }
 
-.messagesView
+#linesView.listView
 {
     
 }
 
-.messagesView .messagesViewItem
+#linesView.listView .listViewItem
 {
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    margin-bottom: 0px;
     color: #808080;
 }
 
-.messagesView .messagesViewItem.chat,
-.messagesView .messagesViewItem.wisper,
-.messagesView .messagesViewItem.join,
-.messagesView .messagesViewItem.leave
+@media (max-width: 640px)
+{
+    #linesView.listView .listViewItem
+    {
+        margin-bottom: 20px;
+    }
+
+    #linesView.listView .listViewItem .createdTime
+    {
+        display: inline-block;
+    }
+
+    #linesView.listView .listViewItem .type
+    {
+        width: 20px;
+        margin-left: 2px;
+        margin-right: 2px;
+        display: inline-block;
+    }
+
+    #linesView.listView .listViewItem .text
+    {
+        margin-left: 24px;
+    }
+}
+
+@media (min-width: 641px)
+{
+    #linesView.listView .listViewItem
+    {
+        display: flex;
+        margin-bottom: 4px;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        margin-bottom: 0px;
+    }
+
+    #linesView.listView .listViewItem .createdTime
+    {
+        flex: 0 0 172px;
+        color: #808080;
+    }
+
+    #linesView.listView .listViewItem .type
+    {
+        flex: 0 0 40px;
+        text-align: center;
+    }
+
+    #linesView.listView .listViewItem .text
+    {
+        flex: 1 1 auto;
+        flex-grow: 1;
+    }
+}
+
+#linesView.listView .listViewItem.chat,
+#linesView.listView .listViewItem.wisper,
+#linesView.listView .listViewItem.join,
+#linesView.listView .listViewItem.leave
 {
     color: #000000;
 }
 
-.messagesView .messagesViewItem.error
+#linesView.listView .listViewItem.error
 {
     color: #cc3333;
 }
 
-.messagesView .messagesViewItem > *
+#linesView.listView .listViewItem > *
 {
-    margin-bottom: 4px;
+    margin-bottom: 0px;
     white-space: pre-line;
 }
 
-.messagesView .messagesViewItem .createdTime
+#linesView.listView .listViewItem > *:last-child
 {
-    width: 180px;
+    margin-right: 0px;
+}
+
+#linesView.listView .listViewItem .createdTime
+{
     color: #808080;
 }
 
-.messagesView .messagesViewItem .type
+#linesView.listView .listViewItem .type
 {
-    width: 32px;
+}
+
+#linesView.listView .listViewItem .text
+{
 }
 
 #unreadsCount
@@ -114,7 +184,7 @@ html,body
     position: fixed;
     top: auto;
     bottom: 0px;
-    left: 20px;
+    left: 0px;
     right: auto;
     margin-bottom: 0px;
     text-align: center;

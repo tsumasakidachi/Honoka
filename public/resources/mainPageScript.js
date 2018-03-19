@@ -11,12 +11,12 @@ $(function () {
 
         this.upper = ko.computed((function () {
             let ids = this.lines().map((function (l) { return l.id; }).bind(this));
-            return Math.max(...ids);
+            return ids.length > 0 ? Math.max(...ids) : 0;
         }).bind(this));
 
         this.lower = ko.computed((function () {
             let ids = this.lines().map((function (l) { return l.id; }).bind(this));
-            return Math.min(...ids);
+            return ids.length > 0 ? Math.min(...ids) : 0;
         }).bind(this));
 
         this.unreadsCount = ko.observable(0);
@@ -53,7 +53,7 @@ $(function () {
         this.refreshLines = function (mode) {
             if (!mode || (mode != 'newer' && mode != 'older') || this.isRefreshWorking()) throw new Error();
 
-            let uri = $('#messages').attr('data-uri-selection');
+            let uri = $('#linesView.listView').attr('data-uri-selection');
             let params = {
                 count: 200
             };
@@ -82,7 +82,7 @@ $(function () {
             response.lines.forEach((function (l) { this.lines.push(l); }).bind(this));
 
             if (contentHeight - windowHeight == scrollOffset) {
-                $(window).scrollTop($('.messagesView .messagesViewItem').last().offset().top);
+                $(window).scrollTop($('#linesView.listView .listViewItem').last().offset().top);
             }
             else {
                 this.unreadsCount(this.unreadsCount() + response.lines.length);
@@ -99,7 +99,7 @@ $(function () {
             response.lines = this.parseLines(response.lines);
             response.lines.reverse().forEach((function (l) { this.lines.unshift(l); }).bind(this));
 
-            let addedItemsHeight = $('.messagesView .messagesViewItem')
+            let addedItemsHeight = $('#linesView.listView .listViewItem')
                 .filter(function (index) { return index >= 0 && index < response.lines.length; })
                 .map(function (index, element) { return $(element).height(); })
                 .toArray()

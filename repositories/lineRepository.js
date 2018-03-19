@@ -88,18 +88,24 @@ var lineRepository = function (mysql) {
         return mode != 'programmatically' || elapsed > self.cooldownTime;
     }
 
-    self.save = function (line) {
+    self.saveAsync = function (line) {
+        let p = new Promise((resolve, reject) => {
         let query = 'insert into `lines` (`created_at`, `host_name`, `type`, `player`, `text`) values (?, ?, ?, ?, ?)';
         let params = [line.createdAt, line.hostName, line.type, line.player, line.text];
         mysql.query(query, params,
             (error, results, fields) => {
-                if (error) throw error;
+                if (error) reject(error);
+
+                resolve();
             });
+        });
+
+        return p;
     }
 
-    self.receive = (hostName, msg) => {
+    self.receive = async (hostName, msg) => {
         let line = self.parse(hostName, msg, new Date());
-        self.save(line);
+        await self.saveAsync(line);
 
         for (let i = 0; i < executeOnReceived.length; i++) {
             executeOnReceived[i](line);

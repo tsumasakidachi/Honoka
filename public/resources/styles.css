@@ -137,7 +137,7 @@ td {
 
 tr:first-child th, tr:first-child td
 {
-	padding: 00px 12px 0px 0px;
+	padding: 0px 12px 0px 0px;
 }
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -375,7 +375,6 @@ ul.listView {
 }
 
 ul.listView li {
-    margin-bottom: 20px;
 }
 
 /* グリッド ビュー */

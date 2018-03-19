@@ -8,24 +8,36 @@ html(lang="ja")
     script(type="text/javascript", src="/resources/jquery-3.2.1.min.js")
     script(type="text/javascript", src="/resources/knockout-3.4.2.js")
     script(type="text/javascript", src="/resources/mainPageScript.js")
-    title Honoka
+    title Lines
   body
     div#framework
-        header.clearfix
-          h1#logo
-            a(href="/" data-bind="text: hostName")= hostName
-          div#nameCard
-            p#name(data-bind="text: userName")= userName
-            p
-              a#connectButton(href="/.repos/connection/connect/" data-bind="visible: connectButtonVisibility, click: connect") 接続
-              a#disconnectButton(href="/.repos/connection/disconnect/" data-bind="visible: disconnectButtonVisibility, click: disconnect") 切断
+        header
+          div.navigations
+            h1#logo
+              a(href="/") Lines
+            nav
+              ul.listView
+                li.listViewItem.selectedItem: a(href="/") 最新
+                li.listViewItem: a(href="/diurnal/") 日別
+                li.listViewItem: a(href="/searchResults/") 検索結果
+          div.commands
+            ul.listView
+              li.listViewItem
+                form(action="/")
+                  input(type="search" size="50" value="")
+              li.listViewItem#hostName(data-bind="text: hostName, visible: hostName()")= hostName
+              li.listViewItem#userName(data-bind="text: userName, visible: userName()")= userName
+              li.listViewItem(data-bind="visible: !isConnected()")
+                a#connectButton(href="/.repos/connection/connect/" data-bind="click: connect") 接続
+              li.listViewItem(data-bind="visible: isConnected()")
+                a#disconnectButton(href="/.repos/connection/disconnect/" data-bind="click: disconnect") 切断
         article#content
-          div#messages.listview.messagesView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
-            div.messagesViewItem(data-bind="css: type")
-              p.createdTime(data-bind="text: createdAtText")
+          div#linesView.listView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
+            div.listViewItem(data-bind="css: type")
               p.type.symbolIconFontStyle(data-bind="html: typeSymbol")
-              p.body(data-bind="text: text")
-        footer.clearfix
+              p.createdTime(data-bind="text: createdAtText")
+              p.text(data-bind="text: text")
+        footer
           p#unreadsCount(data-bind="visible: unreadsCountVisibility")
             span.symbolIconFontStyle!= "&#xE7E7;"
             span.value(data-bind="text: unreadsCount")

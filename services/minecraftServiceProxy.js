@@ -44,9 +44,9 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
         self.bot.quit();
     }
 
-    self.onLogined = function()
+    self.onLogined = async function()
     {
-        lineRepository.save({
+        await lineRepository.saveAsync({
             hostName: self.hostName,
             createdAt: new Date(),
             type: 'notice',
@@ -67,11 +67,11 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
         self.connectionFailCount = 0;
     }
 
-    self.onEnded = function()
+    self.onEnded = async function()
     {
         // ログアウトしたら自動的に再接続する
         if (self.isRetringConnection) {
-            lineRepository.save({
+            await lineRepository.saveAsync({
                 hostName: self.hostName,
                 createdAt: new Date(),
                 type: 'error',
@@ -81,7 +81,7 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
             setTimeout(() => self.connect(), 10000);
         }
         else {
-            lineRepository.save({
+            await lineRepository.saveAsync({
                 hostName: self.hostName,
                 createdAt: new Date(),
                 type: 'notice',
