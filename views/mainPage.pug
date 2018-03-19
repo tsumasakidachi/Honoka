@@ -24,7 +24,7 @@ html(lang="ja")
             ul.listView
               li.listViewItem
                 form(action="/")
-                  input(type="search" size="50" value="")
+                  input(type="search" size="40" value="")
               li.listViewItem#hostName(data-bind="text: hostName, visible: hostName()")= hostName
               li.listViewItem#userName(data-bind="text: userName, visible: userName()")= userName
               li.listViewItem(data-bind="visible: !isConnected()")
