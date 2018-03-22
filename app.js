@@ -7,23 +7,25 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // Settings
-var settings = require("./settings.json");
+var settings = require('./settings.json');
 
 // Database
-var mysql = require("mysql").createConnection(
+var mysql = require('mysql').createConnection(
     {
         host: settings.database.host,
         user: settings.database.user,
         password: settings.database.password,
         database: settings.database.database,
-        charset: "utf8mb4"
+        charset: 'utf8mb4'
     });
 
 // Honoka Modules
 var hostInfoService = require('./services/hostInfoService.js')();
 var factorioService = require('./services/factorioService.js')();
-var lineRepository = require("./repositories/lineRepository.js")(mysql);
-var minecraftServiceProxy = require("./services/minecraftServiceProxy.js")(lineRepository, hostInfoService, factorioService);
+var lineRepository = require('./repositories/lineRepository.js')(mysql);
+var echoService = require('./services/echoService.js')(lineRepository, hostInfoService, factorioService);
+var playersRepository = require('./repositories/playersRepository.js')();
+var minecraftServiceProxy = require('./services/minecraftServiceProxy.js')(lineRepository, playersRepository, echoService);
 
 var app = express();
 
@@ -51,8 +53,8 @@ app.use(function (req, res, next) {
 var reposRouter = require('./routes/reposRouter.js');
 app.use('/.repos', reposRouter);
 
-app.get("/", (req, res) => {
-    res.render("mainPage", {
+app.get('/', (req, res) => {
+    res.render('mainPage', {
         userName: req.minecraft.userName,
         hostName: req.minecraft.hostName
     });

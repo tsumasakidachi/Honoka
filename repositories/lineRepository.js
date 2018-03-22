@@ -1,7 +1,7 @@
 var lineRepository = function (mysql) {
-    let settings = require('../settings.json');
-    let sprintf = require('sprintf-js').sprintf
-    let executeOnReceived = [];
+    var settings = require('../settings.json');
+    var sprintf = require('sprintf-js').sprintf
+    var executeOnReceived = [];
 
     self = this;
     self.cooldownTime = 5000;
@@ -10,9 +10,9 @@ var lineRepository = function (mysql) {
     self.translation = require('../lang.json');
 
     self.getAsync = function (options) {
-        let p = new Promise((resolve, reject) => {
-            let query = 'select `id`, `created_at` as `createdAt`, `host_name` as `hostName`, `type`, `player`, `text` from `lines`';
-            let params = [];
+        var p = new Promise((resolve, reject) => {
+            var query = 'select `id`, `created_at` as `createdAt`, `host_name` as `hostName`, `type`, `player`, `text` from `lines`';
+            var params = [];
 
             query += ' where host_name = ?';
             params.push(options.hostName)
@@ -50,8 +50,8 @@ var lineRepository = function (mysql) {
     }
 
     self.countDiurnalAsync = function () {
-        let p = new Promise((resolve, reject) => {
-            let query = 'select date(`created_at`) as `date`, count(*) as `count` from `lines` group by `date`;';
+        var p = new Promise((resolve, reject) => {
+            var query = 'select date(`created_at`) as `date`, count(*) as `count` from `lines` group by `date`;';
 
             mysql.query(query, [], (error, rows, fields) => {
                 if (error) reject(error);
@@ -83,15 +83,15 @@ var lineRepository = function (mysql) {
     self.canSendInternal = function (text, mode) {
         if (self.lastSentTime == null) return true;
 
-        let elapsed = (new Date()).getTime() - self.lastSentTime.getTime();
+        var elapsed = (new Date()).getTime() - self.lastSentTime.getTime();
 
         return mode != 'programmatically' || elapsed > self.cooldownTime;
     }
 
     self.saveAsync = function (line) {
-        let p = new Promise((resolve, reject) => {
-        let query = 'insert into `lines` (`created_at`, `host_name`, `type`, `player`, `text`) values (?, ?, ?, ?, ?)';
-        let params = [line.createdAt, line.hostName, line.type, line.player, line.text];
+        var p = new Promise((resolve, reject) => {
+        var query = 'insert into `lines` (`created_at`, `host_name`, `type`, `player`, `text`) values (?, ?, ?, ?, ?)';
+        var params = [line.createdAt, line.hostName, line.type, line.player, line.text];
         mysql.query(query, params,
             (error, results, fields) => {
                 if (error) reject(error);
@@ -104,10 +104,10 @@ var lineRepository = function (mysql) {
     }
 
     self.receive = async (hostName, msg) => {
-        let line = self.parse(hostName, msg, new Date());
+        var line = self.parse(hostName, msg, new Date());
         await self.saveAsync(line);
 
-        for (let i = 0; i < executeOnReceived.length; i++) {
+        for (var i = 0; i < executeOnReceived.length; i++) {
             executeOnReceived[i](line);
         }
     }
@@ -117,7 +117,7 @@ var lineRepository = function (mysql) {
     }
 
     self.parse = function (hostName, msg, receivedTime) {
-        let l = {};
+        var l = {};
         l.hostName = hostName;
         l.createdAt = receivedTime;
         l.type = 'chat';
@@ -129,8 +129,8 @@ var lineRepository = function (mysql) {
 
         // 拡張メッセージ
         if ('translate' in msg && 'with' in msg && msg.translate in self.translation) {
-            let texts = msg.with.map((w) => {
-                let parsed = self.parse(hostName, w, receivedTime);
+            var texts = msg.with.map((w) => {
+                var parsed = self.parse(hostName, w, receivedTime);
                 return parsed.text;
             });
 
@@ -143,7 +143,7 @@ var lineRepository = function (mysql) {
             l.text = '';
             l.inline = msg.extra.map((e) => self.parse(hostName, e, receivedTime));
 
-            for (let i = 0; i < l.inline.length; i++) {
+            for (var i = 0; i < l.inline.length; i++) {
                 l.text += l.inline[i].text;
             }
         }

@@ -4,6 +4,7 @@ $(function () {
         this.userName = ko.observable('');
         this.hostName = ko.observable('');
         this.text = ko.observable('');
+        this.searchKeyword = ko.observable('');
 
         this.isRefreshWorking = ko.observable(false);
 

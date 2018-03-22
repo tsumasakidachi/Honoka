@@ -1,11 +1,11 @@
 var hostInfoService = function () {
     var request = require('request');
-    let self = this;
-    let uri = 'http://tmsk.s1001.xrea.com/files/hostinfo/';
+    var self = this;
+    var uri = 'http://tmsk.s1001.xrea.com/files/hostinfo/';
 
     self.getHostInfoAsync = function () {
-        let hostInfo = null;
-        let p = new Promise((resolve, reject) => {
+        var hostInfo = null;
+        var p = new Promise((resolve, reject) => {
             request.get(uri,
                 {
                     'timeout': 4 * 1000,

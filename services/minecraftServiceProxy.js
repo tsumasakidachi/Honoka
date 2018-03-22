@@ -1,15 +1,19 @@
-var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioService) {
-    let self = this;
-    let settings = require('../settings.json');
-    let mineflayer = require('mineflayer');
-    let rs = require('readline-sync');
-    let echoService = require('../services/echoService.js');
+var minecraftServiceProxy = function (lineRepository, playersRepository, echoServiceService) {
+    var self = this;
+    var settings = require('../settings.json');
+    var mineflayer = require('mineflayer');
+    var rs = require('readline-sync');
 
     // Minecraft Account
-    let account = settings.minecraft.user ? settings.minecraft.user : rs.question('Minecraft Account: ');
-    let password = settings.minecraft.password ? settings.minecraft.password : rs.question('Password: ', { hideEchoBack: true });
+    var account = settings.minecraft.user ? settings.minecraft.user : rs.question('Minecraft Account: ');
+    var password = settings.minecraft.password ? settings.minecraft.password : rs.question('Password: ', { hideEchoBack: true });
 
-    let server = rs.question('Host: ').split(':');
+    var server = rs.question('Host: ').split(':');
+
+    self.echoService = echoServiceService;
+    self.playersRepository = playersRepository;
+    self.linesRepository = lineRepository;
+
     self.host = server[0];
     self.port = server.length >= 2 ? server[1] : '25565';
     self.hostName = self.host + ':' + self.port;
@@ -36,6 +40,15 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
 
         // 接続が終了しました
         self.bot.on('end', self.onEnded);
+
+        // チャットを受信
+        self.bot.on('message', (msg) => self.linesRepository.receive(self.hostName, msg));
+
+        // プレイヤーが参加
+        self.bot.on('playerJoined'), (player) => self.playersRepository.playersChanged(self.bot.players);
+
+        // プレイヤーが退出
+        self.bot.on('playerLeft'), (player) => self.playersRepository.playersChanged(self.bot.players);
     };
 
     // ログアウト
@@ -46,7 +59,7 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
 
     self.onLogined = async function()
     {
-        await lineRepository.saveAsync({
+        await self.linesRepository.saveAsync({
             hostName: self.hostName,
             createdAt: new Date(),
             type: 'notice',
@@ -54,12 +67,9 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
         });
 
         // lineRepository
-        lineRepository.onSent = (msg) => self.bot.chat(msg);
-        lineRepository.canSend = () => self.isConnected;
-        self.bot.on('message', (msg) => lineRepository.receive(self.hostName, msg));
-
-        // Behaviors
-        self.bot.echo = echoService(lineRepository, hostInfoService, factorioService);
+        self.linesRepository.onSent = (msg) => self.bot.chat(msg);
+        self.linesRepository.canSend = () => self.isConnected;
+        self.playersRepository.playersChanged(self.bot.players);
 
         self.userName = bot.username;
         self.isConnected = true;
@@ -71,7 +81,7 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
     {
         // ログアウトしたら自動的に再接続する
         if (self.isRetringConnection) {
-            await lineRepository.saveAsync({
+            await self.linesRepository.saveAsync({
                 hostName: self.hostName,
                 createdAt: new Date(),
                 type: 'error',
@@ -81,7 +91,7 @@ var minecraftServiceProxy = function (lineRepository, hostInfoService, factorioS
             setTimeout(() => self.connect(), 10000);
         }
         else {
-            await lineRepository.saveAsync({
+            await self.linesRepository.saveAsync({
                 hostName: self.hostName,
                 createdAt: new Date(),
                 type: 'notice',

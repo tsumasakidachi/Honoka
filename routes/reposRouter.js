@@ -3,7 +3,7 @@ var qs = require("querystring");
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-// メッセージ
+// ライン
 router.get('/lines', async (req, res, next) => {
     let options = {
         hostName: req.minecraft.hostName,
@@ -28,6 +28,12 @@ router.post("/lines/create", (req, res, next) => {
 
     req.line.send(req.body.text, 'userTypes');
     res.json(null);
+});
+
+// プレイヤー
+router.get('/players/', (req, res, next) =>
+{
+    res.json(req.minecraft.playersRepository.get());
 });
 
 // ログイン

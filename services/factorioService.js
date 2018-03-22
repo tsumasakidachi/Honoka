@@ -10,7 +10,7 @@ var factorioService = function () {
             exec(command, function (error, stdout, stderr) {
                 if(error) reject(error);
 
-                let processes = new Csv(stdout, { 'header': true }).parse();
+                var processes = new Csv(stdout, { 'header': true }).parse();
                 resolve(processes.length >= 1);
             });
         });

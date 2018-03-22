@@ -8,7 +8,7 @@ html(lang="ja")
     script(type="text/javascript", src="/resources/jquery-3.2.1.min.js")
     script(type="text/javascript", src="/resources/knockout-3.4.2.js")
     script(type="text/javascript", src="/resources/mainPageScript.js")
-    title Lines
+    title(data-bind="text: hostName")= hostName
   body
     div#framework
         header
@@ -19,19 +19,18 @@ html(lang="ja")
               ul.listView
                 li.listViewItem.selectedItem: a(href="/") 最新
                 li.listViewItem: a(href="/diurnal/") 日別
-                li.listViewItem: a(href="/searchResults/") 検索結果
           div.commands
             ul.listView
               li.listViewItem
-                form(action="/")
-                  input(type="search" size="40" value="")
+                form(action="/" method="get")
+                  input(type="search" name="searchKeyword" value="" placeholder="検索" size="40" data-bind="textInput: searchKeyword")
               li.listViewItem#hostName(data-bind="text: hostName, visible: hostName()")= hostName
               li.listViewItem#userName(data-bind="text: userName, visible: userName()")= userName
               li.listViewItem(data-bind="visible: !isConnected()")
                 a#connectButton(href="/.repos/connection/connect/" data-bind="click: connect") 接続
               li.listViewItem(data-bind="visible: isConnected()")
                 a#disconnectButton(href="/.repos/connection/disconnect/" data-bind="click: disconnect") 切断
-        article#content
+        div#content
           div#linesView.listView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
             div.listViewItem(data-bind="css: type")
               p.type.symbolIconFontStyle(data-bind="html: typeSymbol")
