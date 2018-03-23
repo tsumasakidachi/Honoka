@@ -20,12 +20,11 @@ var mysql = require('mysql').createConnection(
     });
 
 // Honoka Modules
-var hostInfoService = require('./services/hostInfoService.js')();
-var factorioService = require('./services/factorioService.js')();
 var lineRepository = require('./repositories/lineRepository.js')(mysql);
-var echoService = require('./services/echoService.js')(lineRepository, hostInfoService, factorioService);
 var playersRepository = require('./repositories/playersRepository.js')();
-var minecraftServiceProxy = require('./services/minecraftServiceProxy.js')(lineRepository, playersRepository, echoService);
+var hostInfoService = require('./services/hostInfoService.js')();
+var factorioService = require('./services/factorioService.js')(lineRepository, hostInfoService);
+var minecraftServiceProxy = require('./services/minecraftServiceProxy.js')(lineRepository, playersRepository, factorioService);
 
 var app = express();
 

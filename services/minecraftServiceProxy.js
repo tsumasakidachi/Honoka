@@ -1,4 +1,4 @@
-var minecraftServiceProxy = function (lineRepository, playersRepository, echoServiceService) {
+var minecraftServiceProxy = function (lineRepository, playersRepository, factorioService) {
     var self = this;
     var settings = require('../settings.json');
     var mineflayer = require('mineflayer');
@@ -10,9 +10,9 @@ var minecraftServiceProxy = function (lineRepository, playersRepository, echoSer
 
     var server = rs.question('Host: ').split(':');
 
-    self.echoService = echoServiceService;
     self.playersRepository = playersRepository;
     self.linesRepository = lineRepository;
+    self.factorioService = factorioService;
 
     self.host = server[0];
     self.port = server.length >= 2 ? server[1] : '25565';
@@ -45,10 +45,10 @@ var minecraftServiceProxy = function (lineRepository, playersRepository, echoSer
         self.bot.on('message', (msg) => self.linesRepository.receive(self.hostName, msg));
 
         // プレイヤーが参加
-        self.bot.on('playerJoined'), (player) => self.playersRepository.playersChanged(self.bot.players);
+        self.bot.on('playerJoined', self.playersRepository.playersChanged);
 
         // プレイヤーが退出
-        self.bot.on('playerLeft'), (player) => self.playersRepository.playersChanged(self.bot.players);
+        self.bot.on('playerLeft', self.playersRepository.playersChanged);
     };
 
     // ログアウト
