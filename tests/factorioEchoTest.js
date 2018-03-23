@@ -11,11 +11,10 @@ var mysql = require("mysql").createConnection(
         charset: "utf8mb4"
     });
 
+var lineRepository = require('../repositories/lineRepository.js')(mysql);
 var hostInfoService = require('../services/hostInfoService.js')();
-var factorioService = require('../services/factorioService.js')();
-var lineRepository = require("../repositories/lineRepository.js")(mysql);
-var echoService = require('../services/echoService.js')(lineRepository, hostInfoService, factorioService);
-
+var factorioService = require('../services/factorioService.js')(lineRepository, hostInfoService);
+    
 lineRepository.canSend = () => true
 lineRepository.onSent = (text) => console.log(text);
 

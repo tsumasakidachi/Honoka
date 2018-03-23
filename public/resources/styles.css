@@ -347,15 +347,15 @@ textarea
 }
 
 /* フライアウト */
-.flyoutHolder
+.flyoutBase
 {
 	position: relative;
 }
+
 .flyout
 {
 	padding: 20px;
 	position: absolute;
-	display: none;
 	background-color: #fff;
 	color: #000;
 	border: 1px solid #000;

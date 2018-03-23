@@ -24,14 +24,19 @@ html(lang="ja")
               li.listViewItem
                 form(action="/" method="get")
                   input(type="search" name="searchKeyword" value="" placeholder="検索" size="40" data-bind="textInput: searchKeyword")
-              li.listViewItem#hostName(data-bind="text: hostName, visible: hostName()")= hostName
-              li.listViewItem#userName(data-bind="text: userName, visible: userName()")= userName
-              li.listViewItem(data-bind="visible: !isConnected()")
-                a#connectButton(href="/.repos/connection/connect/" data-bind="click: connect") 接続
-              li.listViewItem(data-bind="visible: isConnected()")
-                a#disconnectButton(href="/.repos/connection/disconnect/" data-bind="click: disconnect") 切断
+              li.listViewItem.flyoutBase#connection
+                a#cconnectionButton.symbolIconFontStyle(href="/connection/" data-bind="click: openToggleConnectionFlyout")
+                  span(data-bind="visible: !isConnected()")!= "&#xF384;"
+                  span(data-bind="visible: isConnected()")!= "&#xF385;"
+                div.flyout(data-bind="visible: isConnectionFlyoutOpen")
+                  p.subTitleTextStyle(data-bind="text: hostName, visible: hostName()")= hostName
+                  p(data-bind="text: userName, visible: userName()")= userName
+                  p(data-bind="visible: !isConnected()")
+                    a.commandButtonStyle(href="/connection/connect" data-bind="click: connect") 接続
+                  p(data-bind="visible: isConnected()")
+                    a.commandButtonStyle(href="/connection/disconnect" data-bind="click: disconnect") 切断
         div#content
-          div#linesView.listView(data-bind="foreach: lines" data-uri-selection="/.repos/lines/")
+          div#linesView.listView(data-bind="foreach: lines")
             div.listViewItem(data-bind="css: type")
               p.type.symbolIconFontStyle(data-bind="html: typeSymbol")
               p.createdTime(data-bind="text: createdAtText")
@@ -40,7 +45,7 @@ html(lang="ja")
           p#unreadsCount(data-bind="visible: unreadsCountVisibility")
             span.symbolIconFontStyle!= "&#xE7E7;"
             span.value(data-bind="text: unreadsCount")
-          form#sendingMessage(method="post" action="/.repos/lines/create/" data-bind="submit: post, visible: isConnected")
+          form#sendingMessage(method="post" action="/" data-bind="submit: post, visible: isConnected")
             p#submit
               input#body.symbolIconFontStyle(name="text" type="text" value="" data-bind="textInput: text" required="required" autofocus="autofocus")
               button.symbolIconFontStyle(type="submit")!= "&#xE724;"

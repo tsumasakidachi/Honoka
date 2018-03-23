@@ -6,7 +6,7 @@ var factorioService = function (lineRepository, hostInfoService) {
     var self = this;
 
     self.asnwer = async (line) => {
-        if (!line.body || !line.body.match(/^(factorio|ファクトリオ|ふぁくとりお)$/i)) return;
+        if (true || !line.body || !line.body.match(/^(factorio|ファクトリオ|ふぁくとりお)$/i)) return;
 
         var hostInfo = await hostInfoService.getHostInfoAsync();
         var isOnline = await self.isOnlineAsync();

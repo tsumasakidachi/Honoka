@@ -58,6 +58,16 @@ html,body
     margin-right: 0px;
 }
 
+#connection .flyout
+{
+    right: 0px;
+}
+
+#connection .flyout .subTitleTextStyle
+{
+    margin-bottom: 0px;
+}
+
 
 #sendingMessage
 {

@@ -1,118 +1,119 @@
 $(function () {
     function mainPageScript() {
-        this.isConnected = ko.observable(false);
-        this.userName = ko.observable('');
-        this.hostName = ko.observable('');
-        this.text = ko.observable('');
-        this.searchKeyword = ko.observable('');
+        var self = this;
 
-        this.isRefreshWorking = ko.observable(false);
+        self.isConnected = ko.observable(false);
+        self.userName = ko.observable('');
+        self.hostName = ko.observable('');
+        self.text = ko.observable('');
+        self.searchKeyword = ko.observable('');
 
-        this.lines = ko.observableArray([]);
+        self.isRefreshWorking = ko.observable(false);
 
-        this.upper = ko.computed((function () {
-            let ids = this.lines().map((function (l) { return l.id; }).bind(this));
+        self.lines = ko.observableArray([]);
+
+        self.upper = ko.computed((function () {
+            let ids = self.lines().map((function (l) { return l.id; }).bind(self));
             return ids.length > 0 ? Math.max(...ids) : 0;
-        }).bind(this));
+        }).bind(self));
 
-        this.lower = ko.computed((function () {
-            let ids = this.lines().map((function (l) { return l.id; }).bind(this));
+        self.lower = ko.computed((function () {
+            let ids = self.lines().map((function (l) { return l.id; }).bind(self));
             return ids.length > 0 ? Math.min(...ids) : 0;
-        }).bind(this));
+        }).bind(self));
 
-        this.unreadsCount = ko.observable(0);
-        this.unreadsCountVisibility = ko.pureComputed((function () { return this.isConnected() && this.unreadsCount() > 0 }).bind(this));
+        self.unreadsCount = ko.observable(0);
+        self.unreadsCountVisibility = ko.pureComputed((function () { return self.isConnected() && self.unreadsCount() > 0 }).bind(self));
 
-        this.connectButtonVisibility = ko.pureComputed((function () { return !this.isConnected(); }).bind(this));
-        this.disconnectButtonVisibility = ko.pureComputed((function () { return this.isConnected(); }).bind(this));
+        self.isConnectionFlyoutOpen = ko.observable(false);
 
-        this.post = function (sender, e) {
-            let uri = $(sender).attr('action');
+        self.post = function (sender, e) {
+            let uri = '/.repos/lines/create/';
             let data = {
-                'text': this.text()
+                'text': self.text()
             };
 
-            $.post(uri, data, (function (response, status) { this.onPost(response, status) }).bind(this), 'json');
+            $.post(uri, data, (function (response, status) { self.onPost(response, status) }).bind(self), 'json');
         };
 
-        this.onPost = function (response, status) {
+        self.onPost = function (response, status) {
             if (status != 'success') return;
 
-            // this.refresh();
-            this.text('');
+            // self.refresh();
+            self.text('');
         };
 
-        this.refresh = function () {
-            if(!this.isRefreshWorking()) this.refreshLines('newer');
+        self.refresh = function () {
+            if (!self.isRefreshWorking()) self.refreshLines('newer');
 
-            let propsUri = '/.repos/properties/';
+            let uri = '/.repos/properties/';
             let propsParams = {};
 
-            $.getJSON(propsUri, propsParams, (function (response, status) { this.refreshProperties(response, status) }).bind(this));
+            $.getJSON(uri, propsParams, (function (response, status) { self.refreshProperties(response, status) }).bind(self));
         };
 
-        this.refreshLines = function (mode) {
-            if (!mode || (mode != 'newer' && mode != 'older') || this.isRefreshWorking()) throw new Error();
+        self.refreshLines = function (mode) {
+            if (!mode || (mode != 'newer' && mode != 'older') || self.isRefreshWorking()) throw new Error();
 
-            let uri = $('#linesView.listView').attr('data-uri-selection');
+            let uri = '/.repos/lines/';
             let params = {
                 count: 200
             };
 
             if (mode == 'newer') {
-                params.lower = this.upper() + 1;
-                $.getJSON(uri, params, (function (response, status) { this.onGotNewerLines(response, status) }).bind(this));
+                params.lower = self.upper() + 1;
+                $.getJSON(uri, params, (function (response, status) { self.onGotNewerLines(response, status) }).bind(self));
             }
 
-            if (mode == 'older' && this.lower() >= 0) {
-                params.upper = this.lower() - 1;
-                $.getJSON(uri, params, (function (response, status) { this.onGotOlderLines(response, status) }).bind(this));
+            if (mode == 'older' && self.lower() >= 0) {
+                params.upper = self.lower() - 1;
+                $.getJSON(uri, params, (function (response, status) { self.onGotOlderLines(response, status) }).bind(self));
             }
         }
 
-        this.onGotNewerLines = function (response, status) {
+        self.onGotNewerLines = function (response, status) {
             if (status != 'success' || response.lines.length == 0) return;
 
-            this.isRefreshWorking(true);
+            self.isRefreshWorking(true);
 
             let windowHeight = $(window).height();
             let contentHeight = $('#framework').height();
             let scrollOffset = $(window).scrollTop();
 
-            response.lines = this.parseLines(response.lines);
-            response.lines.forEach((function (l) { this.lines.push(l); }).bind(this));
+            response.lines = self.parseLines(response.lines);
+            response.lines.forEach((function (l) { self.lines.push(l); }).bind(self));
 
             if (contentHeight - windowHeight == scrollOffset) {
                 $(window).scrollTop($('#linesView.listView .listViewItem').last().offset().top);
             }
             else {
-                this.unreadsCount(this.unreadsCount() + response.lines.length);
+                self.unreadsCount(self.unreadsCount() + response.lines.length);
             }
 
-            this.isRefreshWorking(false);
+            self.isRefreshWorking(false);
         };
 
-        this.onGotOlderLines = function (response, status) {
+        self.onGotOlderLines = function (response, status) {
             if (status != 'success' || response.lines.length == 0) return;
 
-            this.isRefreshWorking(true);
+            self.isRefreshWorking(true);
 
-            response.lines = this.parseLines(response.lines);
-            response.lines.reverse().forEach((function (l) { this.lines.unshift(l); }).bind(this));
+            response.lines = self.parseLines(response.lines);
+            response.lines.reverse().forEach((function (l) { self.lines.unshift(l); }).bind(self));
 
             let addedItemsHeight = $('#linesView.listView .listViewItem')
                 .filter(function (index) { return index >= 0 && index < response.lines.length; })
                 .map(function (index, element) { return $(element).height(); })
                 .toArray()
-                .reduce(function(prev, current) { return prev += current; });
+                .reduce(function (prev, current) { return prev += current; });
 
             let scrollOffset = $(window).scrollTop();
             $(window).scrollTop(scrollOffset + addedItemsHeight);
 
-            this.isRefreshWorking(false);
+            self.isRefreshWorking(false);
         }
 
-        this.parseLines = function (lines) {
+        self.parseLines = function (lines) {
             for (let i = 0; i < lines.length; i++) {
                 lines[i].createdAt = new Date(lines[i].createdAt);
                 lines[i].createdAtText = lines[i].createdAt.toLocaleString();
@@ -139,33 +140,41 @@ $(function () {
 
         }
 
-        this.refreshProperties = function (response, status) {
+        self.refreshProperties = function (response, status) {
             if (status != 'success') return;
 
-            this.isConnected(response.isConnected);
-            this.userName(response.userName);
-            this.hostName(response.hostName);
+            self.isConnected(response.isConnected);
+            self.userName(response.userName);
+            self.hostName(response.hostName);
         }
 
-        this.connect = function (sender, e) {
-            let uri = $('#connectButton').attr('href');
+        self.connect = function (sender, e) {
+            let uri = '/.repos/connection/connect/';
 
             $.post(uri, {}, (function (response, status) {
                 if (status != "success") return;
 
-                this.isConnected(response.isConnected);
-            }).bind(this));
+                self.isConnected(response.isConnected);
+            }).bind(self));
+
+            self.isConnectionFlyoutOpen(false);
         };
 
-        this.disconnect = function (sender, e) {
-            let uri = $('#disconnectButton').attr('href');
+        self.disconnect = function (sender, e) {
+            let uri = '/.repos/connection/disconnect/';
 
             $.post(uri, {}, (function (response, status) {
                 if (status != "success") return;
 
-                this.isConnected(response.isConnected);
-            }).bind(this));
+                self.isConnected(response.isConnected);
+            }).bind(self));
+
+            self.isConnectionFlyoutOpen(false);
         };
+
+        self.openToggleConnectionFlyout = function () {
+            self.isConnectionFlyoutOpen(!self.isConnectionFlyoutOpen());
+        }
 
         $(window).scroll((function () {
             let windowHeight = $(window).height();
@@ -174,19 +183,27 @@ $(function () {
 
             // ページの一番下に来たら新しいラインをリセットする
             if (contentHeight - windowHeight == scrollOffset) {
-                this.unreadsCount(0);
+                self.unreadsCount(0);
             }
 
             // ページの一番上に来たら古いラインを取得する
-            if (scrollOffset <= 0 && !this.isRefreshWorking()) {
-                this.refreshLines('older');
+            if (scrollOffset <= 0 && !self.isRefreshWorking()) {
+                self.refreshLines('older');
             }
 
-        }).bind(this));
+        }).bind(self));
+        
+        $(window).click(function () {
+            self.isConnectionFlyoutOpen(false);
+        });
 
-        setInterval((() => this.refresh()).bind(this), 1000);
+        $(".flyout").click(function (event) {
+            event.stopPropagation();
+        });
 
-        return this;
+        setInterval((function () { self.refresh(); }).bind(self), 1000);
+
+        return self;
     }
 
     ko.applyBindings(mainPageScript());
