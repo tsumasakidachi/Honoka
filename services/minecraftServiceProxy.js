@@ -18,7 +18,7 @@ var minecraftServiceProxy = function (lineRepository, playersRepository, factori
     self.port = server.length >= 2 ? server[1] : '25565';
     self.hostName = self.host + ':' + self.port;
     self.isConnected = false;
-    self.isRetringConnection = false;
+    self.isRetryingConnection = false;
     self.userName = '';
 
     // 接続失敗回数
@@ -53,7 +53,7 @@ var minecraftServiceProxy = function (lineRepository, playersRepository, factori
 
     // ログアウト
     self.disconnect = function () {
-        self.isRetringConnection = false;
+        self.isRetryingConnection = false;
         self.bot.quit();
     }
 
@@ -73,14 +73,14 @@ var minecraftServiceProxy = function (lineRepository, playersRepository, factori
 
         self.userName = bot.username;
         self.isConnected = true;
-        self.isRetringConnection = true;
+        self.isRetryingConnection = true;
         self.connectionFailCount = 0;
     }
 
     self.onEnded = async function()
     {
         // ログアウトしたら自動的に再接続する
-        if (self.isRetringConnection) {
+        if (self.isRetryingConnection) {
             await self.linesRepository.saveAsync({
                 hostName: self.hostName,
                 createdAt: new Date(),
