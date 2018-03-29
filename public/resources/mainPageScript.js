@@ -190,9 +190,9 @@ $(function () {
             if (scrollOffset <= 0 && !self.isRefreshWorking()) {
                 self.refreshLines('older');
             }
-
         }).bind(self));
-        
+
+        /*
         $(window).click(function () {
             self.isConnectionFlyoutOpen(false);
         });
@@ -200,6 +200,7 @@ $(function () {
         $(".flyout").click(function (event) {
             event.stopPropagation();
         });
+        */
 
         setInterval((function () { self.refresh(); }).bind(self), 1000);
 

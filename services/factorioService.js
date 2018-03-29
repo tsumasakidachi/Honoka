@@ -1,20 +1,34 @@
 var factorioService = function (lineRepository, hostInfoService) {
     var exec = require('child_process').exec;
     var Csv = require('comma-separated-values');
-    var command = 'tasklist /fi "imagename eq factorio.server.exe" /fo csv';
+    var command = 'tasklist /fi "imagename eq factorio.exe" /fo csv';
+    var addressCache = '';
 
     var self = this;
 
     self.asnwer = async (line) => {
-        if (true || !line.body || !line.body.match(/^(factorio|ファクトリオ|ふぁくとりお)$/i)) return;
+        if (!line.body || !line.body.match(/^(factorio|ファクトリオ|ふぁくとりお)$/i)) return;
 
-        var hostInfo = await hostInfoService.getHostInfoAsync();
+        if(!addressCache)
+        {
+            let hostInfo = await hostInfoService.getHostInfoAsync();
+            addressCache = hostInfo.address;
+        }
+
         var isOnline = await self.isOnlineAsync();
 
         var status = isOnline ? 'オンライン' : 'オフライン';
 
-        lineRepository.send('Factorio マルチ: ' + hostInfo.address + ' ' + status);
+        lineRepository.send('Factorio マルチ: ' + addressCache + ' ' + status);
     };
+
+    self.setAddressCacheFromChat = (line) => {
+        var result = line.body.match(/^SetFactorioAddress\s([0-9]{1-3}\.[0-9]{1-3}\.[0-9]{1-3}\.[0-9]{1-3})$/i);
+
+        if (line.player != 'tsumasakidachi' || !line.body || result == null) return;
+
+        addressCashe = result[1];
+    }
 
     self.isOnlineAsync = () => {
         var p = new Promise((resolve, reject) => {

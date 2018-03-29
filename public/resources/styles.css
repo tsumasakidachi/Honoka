@@ -1,16 +1,16 @@
 @charset 'UTF-8';
 
 /* -------------------------------------------------------------------------------------------------------- */
-/* ページ基本 */
+/* ページ */
 
-body
+html, body
 {
 	margin: 0px;
 	padding: 0px;
 	background-color: #fff;
 	font-size: 15px;
 	line-height: 20px;
-	font-family: 'Segoe UI','Yu Gothic UI','Meiryo',sans-serif;
+	font-family: 'Segoe UI', 'Yu Gothic UI', 'Meiryo', sans-serif;
 	/*
 	font-family: 'Segoe UI','Yu Gothic UI',sans-serif;
 	font-family: 'Tw Cen MT', 'Futura', 'Segoe UI', 'Yu Gothic UI', 'Meiryo',sans-serif;
@@ -18,6 +18,9 @@ body
 	*/
 	color: #000;
 }
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* 文字体裁 */
 
 h1,
 h2,
@@ -28,11 +31,12 @@ h6,
 p,
 ul,
 dl,
-ol,
-form,
-address,
+ul,
 table
 {
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: inherit;
 	margin-top: 0px;
 	margin-bottom: 20px;
 }
@@ -42,24 +46,50 @@ sup, sub
 	line-height: 0.5em;
 }
 
-/*
-h1 *,
-h2 *,
-h3 *,
-h4 *,
-h5 *,
-h6 *,
-p *,
-li *,
-dd *,
-dt *,
-address *,
-th *,
- td *
+.headerText
 {
-	vertical-align: middle;
+    font-size: 46px;
+	line-height: 56px;
+    font-weight: 200;
 }
-*/
+
+.subheaderText
+{
+    font-size: 34px;
+	line-height: 40px;
+    font-weight: 200;
+}
+
+.titleText
+{
+    font-size: 24px;
+	line-height: 28px;
+    font-weight: 200;
+}
+
+.subtitleText
+{
+	font-size: 20px;
+	line-height: 24px;
+    font-weight: normal;
+}
+
+.bodyText
+{
+	font-size: 15px;
+	line-height: 20px;
+}
+
+.captionText
+{
+	font-size: 12px;
+	line-height: 14px;
+}
+
+.symbolIconText
+{
+	font-family: 'Segoe MDL2 Assets';
+}
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* リンク */
@@ -89,13 +119,6 @@ a:hover
 {
 	color: #39f;
 }
-
-/*
-* a
-{
-	vertical-align: baseline;
-}
-*/
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* テーブル */
@@ -137,67 +160,17 @@ td {
 
 tr:first-child th, tr:first-child td
 {
-	padding: 0px 12px 0px 0px;
+	padding: 00px 12px 0px 0px;
 }
 
 /* -------------------------------------------------------------------------------------------------------- */
-/* 見出し */
-
-h1, h2, h3, h4, h5, h6
-{
-	font-size: 15px;
-	line-height: 20px;
-	font-weight: normal;
-}
-
-/*
-h1
-{
-	font-size: 36pt;
-	font-weight: 300;
-}
-
-h2
-{
-	font-size: 16pt;
-	font-weight: normal;
-}
-
-h3
-{
-	margin-bottom: 0px;
-	font-size: 11pt;
-	font-weight: normal;
-}
-
-h4
-{
-}
-
-h5
-{
-}
-
-h6
-{
-}
-*/
-
-/* -------------------------------------------------------------------------------------------------------- */
-/* その他基本 */
+/* その他 */
 
 /* 画像 */
 img
 {
 	vertical-align: middle;
 	border-width: 0px;
-}
-
-/* 水平線 */
-hr
-{
-	height: 1px;
-	color: #ccc;
 }
 
 /* 順不同リスト */
@@ -207,16 +180,23 @@ ul
 	padding-left: 0px;
 }
 
-li
+ul > li
 {
 	margin-left: 0;
 	padding-left: 0px;
 }
 
-li ul
+/* 番号付きリスト */
+ol
 {
-	margin-top: 0px;
-	margin-bottom: 0px;
+	margin-left: 20px;
+	padding-left: 0px;
+}
+
+ol > li
+{
+	margin-left: 0;
+	padding-left: 0px;
 }
 
 /* 定義リスト */
@@ -254,10 +234,11 @@ del
 	color: #999;
 }
 
-/* セクション */
-section
+/* その他 */
+
+textarea
 {
-	margin-bottom: 40px;
+	font-family: 'Consolas', 'Meiryo', sans-serif;
 }
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -328,16 +309,10 @@ form .submit button
 	height: 24px;
 }
 
-textarea
-{
-	font-family: 'Segoe UI','Yu Gothic UI','Meiryo',sans-serif;
-}
-
 /* Notify */
 
 .note
 {
-	font-size: 9pt;
 	color: #808080;
 }
 
@@ -347,11 +322,10 @@ textarea
 }
 
 /* フライアウト */
-.flyoutBase
+.flyoutHolder
 {
 	position: relative;
 }
-
 .flyout
 {
 	padding: 20px;
@@ -369,12 +343,36 @@ textarea
 }
 
 /* リスト ビュー */
+.listView {
+	display: flex;
+}
+
+.listView.vertical {
+	flex-direction: column;
+}
+
+.listView.vertical > .listViewItem {
+	margin-bottom: 20px;
+	flex: 0 0 auto;
+}
+
+.listView.vertical > .listViewItem:last-child {
+	margin-bottom: 0px;
+}
+
+.listView.horizontal > .listViewItem {
+	margin-right: 20px;
+	flex: 0 0 auto;
+}
+
+.listView.horizontal > .listViewItem:last-child {
+	margin-right: 0px;
+}
+
+
 ul.listView {
     margin-left: 0px;
     list-style-type: none;
-}
-
-ul.listView li {
 }
 
 /* グリッド ビュー */
@@ -394,53 +392,6 @@ ul.listView li {
 .gridView .gridViewItem *
 {
     display: block;
-}
-
-/* 文字体裁 */
-
-.headerTextStyle
-{
-    font-size: 46px;
-	line-height: 56px;
-    font-weight: 200;
-}
-
-.subHeaderTextStyle
-{
-    font-size: 34px;
-	line-height: 40px;
-    font-weight: 200;
-}
-
-.titleTextStyle
-{
-    font-size: 24px;
-	line-height: 28px;
-    font-weight: 200;
-}
-
-.subTitleTextStyle
-{
-	font-size: 20px;
-	line-height: 24px;
-    font-weight: normal;
-}
-
-.bodyTextStyle
-{
-	font-size: 15px;
-	line-height: 20px;
-}
-
-.captionTextStyle
-{
-	font-size: 12px;
-	line-height: 14px;
-}
-
-.symbolIconFontStyle
-{
-    font-family: 'Segoe MDL2 Assets';
 }
 
 /* リンク */

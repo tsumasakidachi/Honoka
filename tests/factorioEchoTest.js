@@ -20,6 +20,17 @@ lineRepository.onSent = (text) => console.log(text);
 
 lineRepository.receive('localhost:25565', {
     json: {},
+    text: '[通常]<tsumasakidachi> SetFactorioAddress 202.67.26.10',
+    bold: undefined,
+    italic: undefined,
+    underlined: undefined,
+    strikethrough: undefined,
+    obfuscated: undefined,
+    color: undefined
+});
+
+lineRepository.receive('localhost:25565', {
+    json: {},
     text: '[通常]<tsumasakidachi> factorio',
     bold: undefined,
     italic: undefined,
