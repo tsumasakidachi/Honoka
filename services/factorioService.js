@@ -1,7 +1,7 @@
 var factorioService = function (lineRepository, hostInfoService) {
     var exec = require('child_process').exec;
     var Csv = require('comma-separated-values');
-    var command = 'tasklist /fi "imagename eq factorio.exe" /fo csv';
+    var command = 'netstat -aon | find "34197"';
     var addressCache = '';
 
     var self = this;
@@ -33,10 +33,16 @@ var factorioService = function (lineRepository, hostInfoService) {
     self.isOnlineAsync = () => {
         var p = new Promise((resolve, reject) => {
             exec(command, function (error, stdout, stderr) {
-                if(error) reject(error);
+                if(error)
+                {
+                    resolve(false);
+                    return;
+                }
 
-                var processes = new Csv(stdout, { 'header': true }).parse();
-                resolve(processes.length >= 1);
+                var lines = stdout.trim().split(/\n/);
+                var listeners = lines.map((l) => { return l.trim().split(/\s+/); });
+
+                resolve(listeners.length >= 1);
             });
         });
 
