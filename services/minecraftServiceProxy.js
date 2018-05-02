@@ -1,4 +1,4 @@
-var minecraftServiceProxy = function (lineRepository, playersRepository, factorioService) {
+var minecraftServiceProxy = function (lineRepository, playersRepository) {
     var self = this;
     var settings = require('../settings.json');
     var mineflayer = require('mineflayer');
@@ -12,7 +12,6 @@ var minecraftServiceProxy = function (lineRepository, playersRepository, factori
 
     self.playersRepository = playersRepository;
     self.linesRepository = lineRepository;
-    self.factorioService = factorioService;
 
     self.host = server[0];
     self.port = server.length >= 2 ? server[1] : '25565';

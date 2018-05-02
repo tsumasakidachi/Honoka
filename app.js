@@ -22,9 +22,7 @@ var mysql = require('mysql').createConnection(
 // Honoka Modules
 var lineRepository = require('./repositories/lineRepository.js')(mysql);
 var playersRepository = require('./repositories/playersRepository.js')();
-var hostInfoService = require('./services/hostInfoService.js')();
-var factorioService = require('./services/factorioService.js')(lineRepository, hostInfoService);
-var minecraftServiceProxy = require('./services/minecraftServiceProxy.js')(lineRepository, playersRepository, factorioService);
+var minecraftServiceProxy = require('./services/minecraftServiceProxy.js')(lineRepository, playersRepository);
 
 var app = express();
 
