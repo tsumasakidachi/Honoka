@@ -1,7 +1,7 @@
 {
-  "name": "honoka",
+  "name": "mirai",
   "version": "1.0.12",
-  "description": "穂乃果だよ！",
+  "description": "でへへ",
   "main": "app.js",
   "dependencies": {
     "body-parser": "~1.18.2",
