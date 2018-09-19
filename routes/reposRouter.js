@@ -33,7 +33,7 @@ router.post("/lines/create", (req, res, next) => {
 // プレイヤー
 router.get('/players/', (req, res, next) =>
 {
-    res.json(req.minecraft.playersRepository.get());
+    res.json(req.minecraft.player.get());
 });
 
 // ログイン

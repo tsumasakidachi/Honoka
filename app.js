@@ -19,10 +19,9 @@ var mysql = require('mysql').createConnection(
         charset: 'utf8mb4'
     });
 
-// Honoka Modules
+// Modules
 var lineRepository = require('./repositories/lineRepository.js')(mysql);
-var playersRepository = require('./repositories/playersRepository.js')();
-var minecraftServiceProxy = require('./services/minecraftServiceProxy.js')(lineRepository, playersRepository);
+var minecraftServiceProxy = require('./services/minecraftServiceProxy.js')(lineRepository);
 
 var app = express();
 
