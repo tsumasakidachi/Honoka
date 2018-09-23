@@ -5,7 +5,7 @@ var minecraftServiceProxy = function (lineRepository) {
     var rs = require('readline-sync');
 
     // Minecraft Account
-    if(settings.minecraft.user) console.log('Minecraft Account: ' + settings.minecraft.user);
+    if (settings.minecraft.user) console.log('Minecraft Account: ' + settings.minecraft.user);
     var account = settings.minecraft.user ? settings.minecraft.user : rs.question('Minecraft Account: ');
     var password = settings.minecraft.password ? settings.minecraft.password : rs.question('Password: ', { hideEchoBack: true });
 
@@ -30,13 +30,22 @@ var minecraftServiceProxy = function (lineRepository) {
     self.connect = function () {
         try {
             // Bot を初期化
-            self.bot = mineflayer.createBot({
-                host: self.host,
-                port: self.port,
-                username: account,
-                // password: password,
-                verbose: true
-            });
+            if (account == 'Player') {
+                self.bot = mineflayer.createBot({
+                    host: self.host,
+                    port: self.port,
+                    username: account,
+                    verbose: true
+                });
+            } else {
+                self.bot = mineflayer.createBot({
+                    host: self.host,
+                    port: self.port,
+                    username: account,
+                    password: password,
+                    verbose: true
+                });
+            }
 
             // 機能をロード
             // self.line = require('./lineService')(lineRepository);
@@ -115,8 +124,7 @@ var minecraftServiceProxy = function (lineRepository) {
         }
     };
 
-    self.onSpawn = function()
-    {
+    self.onSpawn = function () {
         console.log(JSON.stringify(self.bot));
     }
 

@@ -35,6 +35,8 @@ var motion = function (bot, line, entity) {
             }
         }
 
+        if(!nearestBy) return;
+
         var targetPosition = nearestBy.position.offset(0, nearestBy.height * 0.8, 0);
         self.bot.lookAt(targetPosition);
     }
@@ -54,6 +56,7 @@ var motion = function (bot, line, entity) {
 
     self.isInSight = function (e) {
         if (!self.bot.entity) return false;
+        if(!e.position) return false;
 
         var yaw = self.bot.entity.yaw;
         var P = self.bot.entity.position;
