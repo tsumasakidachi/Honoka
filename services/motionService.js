@@ -66,11 +66,17 @@ var motion = function (bot, line, entity) {
         var VDZ = self.viewDistance * Math.cos(yaw) + P.z;
         var VD = new Vec3(VDX, P.y, VDZ);
 
-        // とりあえず視程を半径とする円の内側にいるかどうかにする
-
+        // 距離と相対角度
         var distance = P.distanceTo(e.position);
+        var base = P.z - e.position.z;
+        var height = P.x - e.position.x;
+        var relativeAngle = Math.atan2(height, base) + Math.PI;
+        var fovLeftAngle = yaw - (self.fov / 2);
+        var fovRightAngle = yaw + (self.fov / 2);
 
-        return distance <= self.viewDistance;
+        console.log(yaw + ' | ' + fovRightAngle + ' <= ' + relativeAngle + ' <= ' + fovLeftAngle); ////////////////////////////////////////////////////////////////////////////
+
+        return distance <= self.viewDistance && fovRightAngle <= relativeAngle && relativeAngle <= fovLeftAngle;
     };
 
     self.onMoved = function (e) {
