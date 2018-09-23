@@ -7,13 +7,18 @@ var motion = function (bot, line, entity) {
     self.entity = entity;
 
     // 視野
-    var fov = 0.5 * Math.PI; // 90 度
+    self.fov = 0.5 * Math.PI; // 90 度
 
     // 視程
-    var viewDistance = 10;
+    self.viewDistance = 10;
+
+    // 自動で頭を回転;
+    self.isHeadingAuto = true;
 
     // 一番近くの生き物を見る
     self.lookAtNearestLiving = function () {
+        if (!self.isHeadingAuto) return;
+
         // 視界の中にいるエンティティ
         var inSights = self.getLivingInSight();
 
@@ -24,15 +29,13 @@ var motion = function (bot, line, entity) {
         for (id in inSights) {
             var distance = self.bot.entity.position.distanceTo(inSights[id].position);
 
-            if (distanceNearestBy == null || Math.min(distance, distanceNearestBy) == distance) {
+            if ((distanceNearestBy == null || Math.min(distance, distanceNearestBy) == distance) && inSights[id].username != bot.username) {
                 nearestBy = inSights[id];
                 distanceNearestBy = distance;
             }
         }
 
-        var targetPosition = nearestBy.position;
-
-        targetPosition.y += (nearestBy.height * 0.75);
+        var targetPosition = nearestBy.position.offset(0, nearestBy.height * 0.8, 0);
         self.bot.lookAt(targetPosition);
     }
 
@@ -50,7 +53,7 @@ var motion = function (bot, line, entity) {
     };
 
     self.isInSight = function (e) {
-        if (!self.bot.entity) return;
+        if (!self.bot.entity) return false;
 
         var yaw = self.bot.entity.yaw;
         var P = self.bot.entity.position;
@@ -69,23 +72,39 @@ var motion = function (bot, line, entity) {
 
     self.onMoved = function (e) {
         // 視界の中でエンティティが動いたとき
-        if (self.isInSight(e)) {
+        var isInSight = self.isInSight(e);
+
+        if (isInSight) {
             self.lookAtNearestLiving();
         }
     };
 
     self.onChatReceived = function (line) {
-        if(!line.body) return;
+        if (!line.body) return;
 
-        var match = line.body.match(/^heading (\d+)$/);
+        var headingAzimuth = line.body.match(/^heading (\d+)$/);
+        var headingAuto = line.body.match(/^heading auto$/);
 
-        if(!match) return;
+        if (headingAuto) {
+            self.headingAuto();
+        }
+        else if (headingAzimuth) {
+            self.headingAzimuth(parseInt(headingAzimuth[1]));
+        }
+    };
 
-        var yaw = Math.abs(360 - parseInt(match[1]));
+    self.headingAzimuth = function (azimuth) {
+        self.isHeadingAuto = false;
+
+        var yaw = Math.abs(360 - azimuth);
         var heading = yaw / 180 * Math.PI;
 
         bot.look(heading, 0);
-    };
+    }
+
+    self.headingAuto = function () {
+        self.isHeadingAuto = true;
+    }
 
     line.onReceived(self.onChatReceived);
 
