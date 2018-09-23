@@ -1,18 +1,43 @@
+var Vec3 = require('vec3').Vec3;
+
 var motion = function (bot, line, entity) {
     var self = this;
+    self.bot = bot;
+    self.line = line;
+    self.entity = entity;
 
     // 視野
     var fov = 0.5 * Math.PI; // 90 度
 
     // 視程
-    var viewDistance = 20;
+    var viewDistance = 10;
 
-    self.lookLivingInSight = function () {
+    // 一番近くの生き物を見る
+    self.lookAtNearestLiving = function () {
+        // 視界の中にいるエンティティ
         var inSights = self.getLivingInSight();
+
+        // 最も近いエンティティを探す
+        var nearestBy = null;
+        var distanceNearestBy = null;
+
+        for (id in inSights) {
+            var distance = self.bot.entity.position.distanceTo(inSights[id].position);
+
+            if (distanceNearestBy == null || Math.min(distance, distanceNearestBy) == distance) {
+                nearestBy = inSights[id];
+                distanceNearestBy = distance;
+            }
+        }
+
+        var targetPosition = nearestBy.position;
+
+        targetPosition.y += (nearestBy.height * 0.75);
+        self.bot.lookAt(targetPosition);
     }
 
     self.getLivingInSight = function () {
-        var living = entity.getLiving();
+        var living = self.entity.getLiving();
         var results = {};
 
         for (id in living) {
@@ -24,23 +49,47 @@ var motion = function (bot, line, entity) {
         return results;
     };
 
-    self.isInSight = function (entity) {
-        var yaw = bot.entity.yaw;
-        var P = bot.entity.position;
-        var A = 0;
-        var B = 0;
+    self.isInSight = function (e) {
+        if (!self.bot.entity) return;
 
-        if (
-            entity.position.x < north && entity.position.z > south
-            &&
-            entity.position.z < east && entity.position.z > west
-            &&
-            entity.position.y < top && entity.position.y > bottom
-        ) {
-        }
+        var yaw = self.bot.entity.yaw;
+        var P = self.bot.entity.position;
 
-        return this;
+        // VD の座標
+        var VDX = self.viewDistance * Math.sin(yaw) + P.x;
+        var VDZ = self.viewDistance * Math.cos(yaw) + P.z;
+        var VD = new Vec3(VDX, P.y, VDZ);
+
+        // とりあえず視程を半径とする円の内側にいるかどうかにする
+
+        var distance = P.distanceTo(e.position);
+
+        return distance <= self.viewDistance;
     };
+
+    self.onMoved = function (e) {
+        // 視界の中でエンティティが動いたとき
+        if (self.isInSight(e)) {
+            self.lookAtNearestLiving();
+        }
+    };
+
+    self.onChatReceived = function (line) {
+        if(!line.body) return;
+
+        var match = line.body.match(/^heading (\d+)$/);
+
+        if(!match) return;
+
+        var yaw = Math.abs(360 - parseInt(match[1]));
+        var heading = yaw / 180 * Math.PI;
+
+        bot.look(heading, 0);
+    };
+
+    line.onReceived(self.onChatReceived);
+
+    return self;
 }
 
 module.exports = motion;

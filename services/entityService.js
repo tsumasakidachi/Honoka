@@ -3,6 +3,8 @@ var entity = function () {
     self.entities = {};
 
     self.onSpawn = function (e) {
+        if(e == null) return;
+
         self.entities[e.id] = e;
     };
 
@@ -14,7 +16,7 @@ var entity = function () {
         delete self.entities[e.id];
     };
 
-    self.getLiving() = function () {
+    self.getLiving = function () {
         var results = {};
 
         for (id in self.entities) {
@@ -24,9 +26,9 @@ var entity = function () {
         }
 
         return results;
-    }
+    };
 
-    return this;
+    return self;
 }
 
 module.exports = entity;

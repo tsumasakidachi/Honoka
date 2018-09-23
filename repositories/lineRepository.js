@@ -64,7 +64,7 @@ var lineRepository = function (mysql) {
     }
 
     self.send = function (text, mode = 'programmatically') {
-        if (!self.canSend(text) || !self.canSendInternal(text, mode)) throw new Error();
+        if (!self.canSend(text) || !self.canSendInternal(text, mode)) return;
 
         self.onSent(text);
 
@@ -81,11 +81,11 @@ var lineRepository = function (mysql) {
     }
 
     self.canSendInternal = function (text, mode) {
-        if (self.lastSentTime == null) return true;
+        if (self.lastSentTime == null || self.lastSentMessage == null) return true;
 
         var elapsed = (new Date()).getTime() - self.lastSentTime.getTime();
 
-        return mode != 'programmatically' || elapsed > self.cooldownTime;
+        return mode != 'programmatically' || (elapsed > self.cooldownTime && text != self.lastSentMessage);
     }
 
     self.saveAsync = function (line) {
@@ -179,7 +179,7 @@ var lineRepository = function (mysql) {
         return l;
     };
 
-    return this;
+    return self;
 }
 
 module.exports = lineRepository;
