@@ -74,9 +74,11 @@ var motion = function (bot, line, entity) {
         var fovLeftAngle = yaw - (self.fov / 2);
         var fovRightAngle = yaw + (self.fov / 2);
 
-        console.log(yaw + ' | ' + fovRightAngle + ' <= ' + relativeAngle + ' <= ' + fovLeftAngle); ////////////////////////////////////////////////////////////////////////////
+        // console.log(yaw + ' | ' + fovRightAngle + ' <= ' + relativeAngle + ' <= ' + fovLeftAngle); ////////////////////////////////////////////////////////////////////////////
 
-        return distance <= self.viewDistance && fovRightAngle <= relativeAngle && relativeAngle <= fovLeftAngle;
+        // 視程よりも近いかつ視野の中にいる
+        // return distance <= self.viewDistance && fovRightAngle <= relativeAngle && relativeAngle <= fovLeftAngle;
+        return distance <= self.viewDistance;
     };
 
     self.onMoved = function (e) {
